@@ -333,6 +333,7 @@ class RoboFile extends \Robo\Tasks
 
         $files = [
             'src/',
+            'tests/_data/',
             'tests/_support/Helper/',
             'tests/acceptance/',
             'tests/unit/',
@@ -378,6 +379,7 @@ class RoboFile extends \Robo\Tasks
                     ->setIgnore([
                         '*/composer.json',
                         '*/.gitignore',
+                        '*.scss',
                         '*.txt',
                         '*.yml',
                     ])

@@ -11,7 +11,7 @@ class SassRoboFile extends Tasks
 {
     use SassTaskLoader;
 
-    public function compileFilesOk(
+    public function compileFiles(
         string $name,
         array $options = [
             'style' => 'expanded',
@@ -21,10 +21,11 @@ class SassRoboFile extends Tasks
             'embed' => false,
             'indent' => 4,
             'precision' => 4,
+            'includePaths' => [],
         ]
     ): TaskInterface {
         $files = (new Finder())
-            ->in(__DIR__ .'/scss')
+            ->in(__DIR__ . '/scss')
             ->files()
             ->name($name);
 

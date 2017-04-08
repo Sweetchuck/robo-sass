@@ -1,6 +1,6 @@
 {
     "name": "cheppers/robo-sass",
-    "description": "Template to create a new Robo task.",
+    "description": "Compile SCSS files with the 'sass' PHP extension.",
     "license": "GPL-2.0",
     "config": {
         "bin-dir": "bin",
@@ -11,16 +11,16 @@
     "require": {
         "php": ">=7.1",
         "ext-sass": "^0.5",
-        "cheppers/asset-jar": "^0.0.1",
+        "cheppers/asset-jar": "^0.0",
         "consolidation/robo": "^1.0"
     },
     "require-dev": {
         "cheppers/git-hooks": "^0.0",
-        "cheppers/robo-git": "^0.0.3",
-        "cheppers/robo-phpcs": "^0.0.12",
+        "cheppers/robo-git": "^0.0",
+        "cheppers/robo-phpcs": "^0.0",
         "codeception/codeception": "^2.2",
-        "danielstjules/stringy": "^2.3",
-        "symfony/finder": "^3.2",
+        "danielstjules/stringy": "^3.0",
+        "symfony/finder": "^2.8 || ^3.2",
         "webmozart/path-util": "^2.3"
     },
     "autoload": {
@@ -34,7 +34,10 @@
             "Cheppers\\Robo\\Sass\\Test\\Helper\\": "tests/_support/Helper/",
             "Cheppers\\Robo\\Sass\\Tests\\Acceptance\\": "tests/acceptance/",
             "Cheppers\\Robo\\Sass\\Tests\\Unit\\": "tests/unit/"
-        }
+        },
+        "classmap": [
+            "tests/_data/project-01/SassRoboFile.php"
+        ]
     },
     "scripts": {
         "post-install-cmd": [

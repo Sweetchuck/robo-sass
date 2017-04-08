@@ -1,0 +1,10 @@
+
+@import "foo/bar";
+@import "gem-01";
+@import "gem-02";
+
+.foo {
+  @include bar;
+  @include gem-01;
+  @include gem-02;
+}
