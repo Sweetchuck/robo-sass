@@ -1,0 +1,10 @@
+
+/bin/
+/vendor/
+
+/tests/_data/scss/**/*.css
+/tests/_data/scss/**/*.css.map
+/tests/_output/
+/tests/_support/_generated/
+
+/.git-hooks.local

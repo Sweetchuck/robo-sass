@@ -1,0 +1,11 @@
+
+@import "lib/colors";
+
+/* My Comment. */
+.foo {
+  color: $main-color;
+
+  .bar {
+    font-size: #{$main-font-size}px;
+  }
+}

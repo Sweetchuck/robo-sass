@@ -1,0 +1,40 @@
+
+cache:
+    directories:
+        - '$HOME/.composer/cache'
+
+matrix:
+    fast_finish: true
+    include:
+        -
+            os: 'linux'
+            dist: 'trusty'
+            sudo: true
+            language: 'php'
+            php: '7.1'
+#        -
+#            os: 'osx'
+#            language: 'generic'
+#            env:
+#                - >-
+#                    BREW_PHP=php71
+
+before_install:
+    - 'export COMPOSER_NO_INTERACTION=1'
+    - 'export COMPOSER_DISABLE_XDEBUG_WARN=1'
+    - 'src-dev/scripts/travis/before_install.sh'
+
+install:
+    - 'echo "@todo"'
+#    - 'composer install'
+
+script:
+    - 'echo "@todo"'
+#    - './bin/robo --ansi lint'
+#    - './bin/robo --ansi test'
+
+#after_success:
+#    - 'bash <(curl -s https://codecov.io/bash)'
+
+notifications:
+    email: false

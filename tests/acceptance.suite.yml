@@ -1,0 +1,7 @@
+
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - Asserts
+        - \Cheppers\Robo\Sass\Test\Helper\Acceptance
+        - \Cheppers\Robo\Sass\Test\Helper\Module\RoboTaskRunner
