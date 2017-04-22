@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
-    echo "Here's the OSX environment:"
+    echo 'Here is the OSX environment:'
     git --version
     sw_vers
     brew --version
@@ -35,13 +35,4 @@ if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
     ln -s "$(pwd)/composer.phar" "$HOME/bin/composer"
 fi
 
-git clone https://github.com/absalomedia/sassphp.git
-cd sassphp
-git checkout PR3
-git submodule init
-git submodule update
-php ./install.php
-make install
-php -i
-#echo 'extension=sass.so' >> todo/sass.ini
-cd ..
+src-dev/scripts/install-php-ext-sass.sh

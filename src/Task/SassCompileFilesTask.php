@@ -2,6 +2,7 @@
 
 namespace Cheppers\Robo\Sass\Task;
 
+use Cheppers\Robo\Sass\Utils;
 use Robo\Result;
 use Symfony\Component\Filesystem\Filesystem;
 use Webmozart\PathUtil\Path;
@@ -45,36 +46,64 @@ class SassCompileFilesTask extends BaseTask
      */
     public function setStyle(string $value)
     {
+        if (is_numeric($value)) {
+            $value = (int) $value;
+        }
+
         $styles = $this->validStyles();
         if (isset($styles[$value])) {
             $this->style = $value;
-        } elseif (($style = array_search($value, $styles))) {
+        } elseif ($style = array_search($value, $styles, true)) {
             $this->style = $style;
         } else {
-            throw new \InvalidArgumentException('@todo');
+            throw new \InvalidArgumentException(sprintf('Invalid style identifier "%s"', $value), 1);
         }
 
         return $this;
     }
     // endregion
 
-    // region Option - includePath.
+    // region Option - includePaths.
     /**
-     * @var string
+     * @var array
      */
-    protected $includePath = '';
+    protected $includePaths = [];
 
-    public function getIncludePath(): string
+    public function getIncludePaths(): array
     {
-        return $this->includePath;
+        return $this->includePaths;
     }
 
     /**
      * @return $this
      */
-    public function setIncludePath(string $value)
+    public function setIncludePaths(array $paths)
     {
-        $this->includePath = $value;
+        if (gettype(reset($paths)) === 'boolean') {
+            $this->includePaths = $paths;
+        } else {
+            $this->includePaths = array_fill_keys($paths, true);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function addIncludePath(string $path)
+    {
+        $this->includePaths[$path] = true;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function removeIncludePath(string $path)
+    {
+        unset($this->includePaths[$path]);
 
         return $this;
     }
@@ -259,8 +288,8 @@ class SassCompileFilesTask extends BaseTask
                     $this->setStyle($value);
                     break;
 
-                case 'includePath':
-                    $this->setIncludePath($value);
+                case 'includePaths':
+                    $this->setIncludePaths($value);
                     break;
 
                 case 'precision':
@@ -329,11 +358,19 @@ class SassCompileFilesTask extends BaseTask
         $this->sass = new $this->sassClass();
 
         $this->sass->setStyle($this->getStyleNumeric());
-        $this->sass->setIncludePath($this->getIncludePath());
         $this->sass->setPrecision($this->getPrecision());
         $this->sass->setComments($this->getComments());
         $this->sass->setIndent($this->getIndent());
         $this->sass->setEmbed($this->getEmbed());
+        
+        $includePaths = $this->getIncludePaths();
+        $gemPaths = $this->getAssetJarValue('gemPaths');
+        if (is_iterable($gemPaths)) {
+            $includePaths += array_fill_keys(Utils::includePathsFromGemPaths($gemPaths), true);
+        }
+
+        $includePaths = array_keys($includePaths, true, true);
+        $this->sass->setIncludePath(implode(PATH_SEPARATOR, $includePaths));
 
         $cssPath = $this->getCssPath();
         $mapPath = $this->getMapPath();

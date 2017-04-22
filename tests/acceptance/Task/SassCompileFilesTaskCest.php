@@ -19,8 +19,6 @@ class SassCompileFilesTaskCest
 
     public function __construct()
     {
-        require_once codecept_data_dir('project-01/SassRoboFile.php');
-
         $this->fs = new Filesystem();
     }
 
@@ -45,21 +43,19 @@ class SassCompileFilesTaskCest
         $I->assertEquals(0, $I->getRoboTaskExitCode($id));
         $I->assertEquals('', $I->getRoboTaskStdOutput($id));
         $I->assertEquals(" [Sass::compile] Compile files\n", $I->getRoboTaskStdError($id));
-        $I->assertContains(
-            implode("\n", [
-                '/* My Comment. */',
-                '.foo {',
-                '  color: #ffffff;',
-                '}',
-                '',
-                '.foo .bar {',
-                '  font-size: 3.3333px;',
-                '}',
-                '',
-                '/*# sourceMappingURL='
-            ]),
-            file_get_contents("$tmpDir/01.css")
-        );
+        $I->openFile("$tmpDir/01.css");
+        $I->seeInThisFile(implode("\n", [
+            '/* My Comment. */',
+            '.foo {',
+            '  color: #ffffff;',
+            '}',
+            '',
+            '.foo .bar {',
+            '  font-size: 3.3333px;',
+            '}',
+            '',
+            '/*# sourceMappingURL='
+        ]));
 
         $map = json_decode(file_get_contents("$tmpDir/01.css.map"), true);
         $I->assertEquals(
