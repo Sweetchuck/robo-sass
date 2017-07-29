@@ -333,6 +333,7 @@ class RoboFile extends \Robo\Tasks
 
         $files = [
             'src/',
+            'src-dev/Composer/',
             'tests/_data/',
             'tests/_support/Helper/',
             'tests/acceptance/',
