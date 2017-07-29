@@ -1,6 +1,6 @@
 <?php
 
-namespace Cheppers\Robo\Sass\Test\Helper;
+namespace Sweetchuck\Robo\Sass\Test\Helper;
 
 class Acceptance extends \Codeception\Module
 {

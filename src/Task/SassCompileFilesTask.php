@@ -1,8 +1,8 @@
 <?php
 
-namespace Cheppers\Robo\Sass\Task;
+namespace Sweetchuck\Robo\Sass\Task;
 
-use Cheppers\Robo\Sass\Utils;
+use Sweetchuck\Robo\Sass\Utils;
 use Robo\Result;
 use Symfony\Component\Filesystem\Filesystem;
 use Webmozart\PathUtil\Path;

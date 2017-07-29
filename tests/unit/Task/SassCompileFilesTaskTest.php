@@ -1,10 +1,10 @@
 <?php
 
-namespace Cheppers\Robo\Sass\Tests\Unit\Task;
+namespace Sweetchuck\Robo\Sass\Tests\Unit\Task;
 
-use Cheppers\AssetJar\AssetJar;
-use Cheppers\Robo\Sass\Task\SassCompileFilesTask;
-use Cheppers\Robo\Sass\Test\Helper\Dummy\Output as DummyOutput;
+use Sweetchuck\AssetJar\AssetJar;
+use Sweetchuck\Robo\Sass\Task\SassCompileFilesTask;
+use Sweetchuck\Robo\Sass\Test\Helper\Dummy\Output as DummyOutput;
 use Codeception\Test\Unit;
 use Codeception\Util\Stub;
 use Robo\Robo;
@@ -14,7 +14,7 @@ use Symfony\Component\Finder\Finder;
 class SassCompileFilesTaskTest extends Unit
 {
     /**
-     * @var \Cheppers\Robo\Sass\Test\UnitTester
+     * @var \Sweetchuck\Robo\Sass\Test\UnitTester
      */
     protected $tester;
 

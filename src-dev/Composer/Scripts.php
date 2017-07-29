@@ -1,22 +1,22 @@
 <?php
 
-namespace Cheppers\Robo\Sass\Composer;
+namespace Sweetchuck\Robo\Sass\Composer;
 
-use Cheppers\GitHooks\Main as GitHooksComposerScripts;
+use Sweetchuck\GitHooks\Composer\Scripts as GitHooks;
 use Composer\Script\Event;
 
 class Scripts
 {
     public static function postInstallCmd(Event $event): bool
     {
-        GitHooksComposerScripts::deploy($event);
+        GitHooks::deploy($event);
 
         return true;
     }
 
     public static function postUpdateCmd(Event $event): bool
     {
-        GitHooksComposerScripts::deploy($event);
+        GitHooks::deploy($event);
 
         return true;
     }

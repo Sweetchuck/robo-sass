@@ -1,6 +1,6 @@
 <?php
 
-namespace Cheppers\Robo\Sass;
+namespace Sweetchuck\Robo\Sass;
 
 class Utils
 {

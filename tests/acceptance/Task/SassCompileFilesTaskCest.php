@@ -1,8 +1,8 @@
 <?php
 
-namespace Cheppers\Robo\Sass\Tests\Acceptance\Task;
+namespace Sweetchuck\Robo\Sass\Tests\Acceptance\Task;
 
-use Cheppers\Robo\Sass\Test\AcceptanceTester;
+use Sweetchuck\Robo\Sass\Test\AcceptanceTester;
 use Symfony\Component\Filesystem\Filesystem;
 
 class SassCompileFilesTaskCest
@@ -88,7 +88,7 @@ class SassCompileFilesTaskCest
         $I->assertEquals('', $I->getRoboTaskStdOutput($id));
         $I->assertContains(" [Sass::compile] Compile files\n", $I->getRoboTaskStdError($id));
         $I->assertContains(
-            '[error]  Error: Invalid CSS after "  color: #ffffff;": expected "}", was ""',
+            'Error: Invalid CSS after "  color: #ffffff;": expected "}", was ""',
             $I->getRoboTaskStdError($id)
         );
     }

@@ -1,13 +1,13 @@
 <?php
 
-namespace Cheppers\Robo\Sass;
+namespace Sweetchuck\Robo\Sass;
 
 use Robo\Collection\CollectionBuilder;
 
 trait SassTaskLoader
 {
     /**
-     * @return \Cheppers\Robo\Sass\Task\SassCompileFilesTask|\Robo\Collection\CollectionBuilder
+     * @return \Sweetchuck\Robo\Sass\Task\SassCompileFilesTask|\Robo\Collection\CollectionBuilder
      */
     protected function taskSassCompile(array $options = []): CollectionBuilder
     {

@@ -1,7 +1,7 @@
 # Robo task wrapper for Sass
 
-[![Build Status](https://travis-ci.org/Cheppers/robo-sass.svg?branch=master)](https://travis-ci.org/Cheppers/robo-sass)
-[![codecov](https://codecov.io/gh/Cheppers/robo-sass/branch/master/graph/badge.svg)](https://codecov.io/gh/Cheppers/robo-sass)
+[![Build Status](https://travis-ci.org/Sweetchuck/robo-sass.svg?branch=master)](https://travis-ci.org/Sweetchuck/robo-sass)
+[![codecov](https://codecov.io/gh/Sweetchuck/robo-sass/branch/master/graph/badge.svg)](https://codecov.io/gh/Sweetchuck/robo-sass)
 
 Compile SASS/SCSS files with [sass PHP extension](https://github.com/jamierumbelow/sassphp)
 
@@ -10,7 +10,7 @@ Compile SASS/SCSS files with [sass PHP extension](https://github.com/jamierumbel
 ```php
 <?php
 
-use Cheppers\Robo\Sass\SassTaskLoader;
+use Sweetchuck\Robo\Sass\SassTaskLoader;
 use Robo\Contract\TaskInterface;
 use Robo\Tasks;
 use Symfony\Component\Finder\Finder;
