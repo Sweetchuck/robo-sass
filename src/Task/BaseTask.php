@@ -2,15 +2,11 @@
 
 namespace Sweetchuck\Robo\Sass\Task;
 
-use Sweetchuck\AssetJar\AssetJarAware;
-use Sweetchuck\AssetJar\AssetJarAwareInterface;
 use Robo\Task\BaseTask as RoboBaseTask;
 use Robo\TaskInfo;
 
-abstract class BaseTask extends RoboBaseTask implements AssetJarAwareInterface
+abstract class BaseTask extends RoboBaseTask
 {
-    use AssetJarAware;
-
     /**
      * @var string
      */
@@ -31,6 +27,28 @@ abstract class BaseTask extends RoboBaseTask implements AssetJarAwareInterface
      */
     protected $assets = [];
 
+    // region Option - assetNamePrefix.
+    /**
+     * @var string
+     */
+    protected $assetNamePrefix = '';
+
+    public function getAssetNamePrefix(): string
+    {
+        return $this->assetNamePrefix;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setAssetNamePrefix(string $value)
+    {
+        $this->assetNamePrefix = $value;
+
+        return $this;
+    }
+    // endregion
+
     /**
      * {@inheritdoc}
      */
@@ -42,7 +60,18 @@ abstract class BaseTask extends RoboBaseTask implements AssetJarAwareInterface
     /**
      * @return $this
      */
-    abstract public function setOptions(array $option);
+    public function setOptions(array $options)
+    {
+        foreach ($options as $name => $value) {
+            switch ($name) {
+                case 'assetNamePrefix':
+                    $this->setAssetNamePrefix($value);
+                    break;
+            }
+        }
+
+        return $this;
+    }
 
     public function getTaskName(): string
     {
