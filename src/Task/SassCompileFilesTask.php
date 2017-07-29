@@ -25,6 +25,28 @@ class SassCompileFilesTask extends BaseTask
     protected $sassException = null;
 
     // region Options.
+    // region Option - gemPaths.
+    /**
+     * @var array
+     */
+    protected $gemPaths = [];
+
+    public function getGemPaths(): array
+    {
+        return $this->gemPaths;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setGemPaths(array $value)
+    {
+        $this->gemPaths = $value;
+
+        return $this;
+    }
+    // endregion
+
     // region Option - style.
     /**
      * @var string
@@ -274,14 +296,12 @@ class SassCompileFilesTask extends BaseTask
      */
     public function setOptions(array $options)
     {
+        parent::setOptions($options);
+
         foreach ($options as $name => $value) {
             switch ($name) {
-                case 'assetJar':
-                    $this->setAssetJar($value);
-                    break;
-
-                case 'assetJarMapping':
-                    $this->setAssetJarMapping($value);
+                case 'gemPaths':
+                    $this->setGemPaths($value);
                     break;
 
                 case 'style':
@@ -333,7 +353,6 @@ class SassCompileFilesTask extends BaseTask
         return $this
             ->runHeader()
             ->runDoIt()
-            ->runReleaseAssets()
             ->runReturn();
     }
 
@@ -364,7 +383,7 @@ class SassCompileFilesTask extends BaseTask
         $this->sass->setEmbed($this->getEmbed());
         
         $includePaths = $this->getIncludePaths();
-        $gemPaths = $this->getAssetJarValue('gemPaths');
+        $gemPaths = $this->getGemPaths();
         if (is_iterable($gemPaths)) {
             $includePaths += array_fill_keys(Utils::includePathsFromGemPaths($gemPaths), true);
         }
@@ -422,31 +441,23 @@ class SassCompileFilesTask extends BaseTask
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function runReleaseAssets()
+    protected function runReturn(): Result
     {
-        if ($this->hasAssetJar()) {
-            $assetJar = $this->getAssetJar();
-            foreach ($this->assets as $name => $value) {
-                $map = $this->getAssetJarMap($name);
-                if ($map) {
-                    $assetJar->setValue($map, $value);
-                }
+        $assetNamePrefix = $this->getAssetNamePrefix();
+        if ($assetNamePrefix === '') {
+            $data = $this->assets;
+        } else {
+            $data = [];
+            foreach ($this->assets as $key => $value) {
+                $data["{$assetNamePrefix}{$key}"] = $value;
             }
         }
 
-        return $this;
-    }
-
-    protected function runReturn(): Result
-    {
         if ($this->sassException) {
-            return Result::fromException($this, $this->sassException, $this->assets);
+            return Result::fromException($this, $this->sassException, $data);
         }
 
-        return Result::success($this, '', $this->assets);
+        return Result::success($this, '', $data);
     }
 
     protected function cssFileName(string $sassFileName): string

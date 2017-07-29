@@ -2,7 +2,6 @@
 
 namespace Sweetchuck\Robo\Sass\Tests\Unit\Task;
 
-use Sweetchuck\AssetJar\AssetJar;
 use Sweetchuck\Robo\Sass\Task\SassCompileFilesTask;
 use Sweetchuck\Robo\Sass\Test\Helper\Dummy\Output as DummyOutput;
 use Codeception\Test\Unit;
@@ -263,18 +262,10 @@ class SassCompileFilesTaskTest extends Unit
                     ],
                 ],
                 [
-                    'assetJar' => new AssetJar([
-                        'bundleShowPaths' => [
-                            'paths' => [
-                                "$gemSetDir/gem-01",
-                                "$gemSetDir/gem-02",
-                                "$gemSetDir/gem-03",
-                            ],
-                        ],
-                    ]),
-                    'assetJarMapping' => [
-                        'gemPaths' => ['bundleShowPaths', 'paths'],
-                        'files' => ['files'],
+                    'gemPaths' => [
+                        "$gemSetDir/gem-01",
+                        "$gemSetDir/gem-02",
+                        "$gemSetDir/gem-03",
                     ],
                     'files' => (new Finder())
                         ->in($in)
@@ -296,11 +287,6 @@ class SassCompileFilesTaskTest extends Unit
         $expected += [
             'exitCode' => 0,
             'data' => [],
-        ];
-
-        $options += [
-            'assetJar' => new AssetJar(),
-            'assetJarMapping' => ['files' => ['files']],
         ];
 
         $config = [
@@ -371,10 +357,6 @@ class SassCompileFilesTaskTest extends Unit
         $container->add('output', $stdOutput, false);
         Robo::setContainer($container);
 
-        $options += [
-            'assetJar' => new AssetJar(),
-            'assetJarMapping' => ['files' => ['files']],
-        ];
         $task = new SassCompileFilesTask($options);
         $result = $task->run();
 
