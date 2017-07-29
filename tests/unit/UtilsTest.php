@@ -1,13 +1,13 @@
 <?php
 
-namespace Cheppers\Robo\Sass\Test;
+namespace Sweetchuck\Robo\Sass\Test;
 
-use Cheppers\Robo\Sass\Utils;
+use Sweetchuck\Robo\Sass\Utils;
 
 class UtilsTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \Cheppers\Robo\Sass\Test\UnitTester
+     * @var \Sweetchuck\Robo\Sass\Test\UnitTester
      */
     protected $tester;
 

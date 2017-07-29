@@ -1,6 +1,6 @@
 <?php
 
-namespace Cheppers\Robo\Sass\Test\Helper\Dummy;
+namespace Sweetchuck\Robo\Sass\Test\Helper\Dummy;
 
 class Process extends \Symfony\Component\Process\Process
 {

@@ -4,5 +4,5 @@ modules:
     enabled:
         - Asserts
         - Filesystem
-        - \Cheppers\Robo\Sass\Test\Helper\Acceptance
-        - \Cheppers\Robo\Sass\Test\Helper\Module\RoboTaskRunner
+        - \Sweetchuck\Robo\Sass\Test\Helper\Acceptance
+        - \Sweetchuck\Robo\Sass\Test\Helper\Module\RoboTaskRunner

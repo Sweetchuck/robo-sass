@@ -1,6 +1,6 @@
 <?php
 
-namespace Cheppers\Robo\Sass\Test\Helper\Dummy;
+namespace Sweetchuck\Robo\Sass\Test\Helper\Dummy;
 
 use Codeception\Lib\Console\Output as ConsoleOutput;
 

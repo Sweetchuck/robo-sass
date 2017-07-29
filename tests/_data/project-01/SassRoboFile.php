@@ -1,6 +1,6 @@
 <?php
 
-use Cheppers\Robo\Sass\SassTaskLoader;
+use Sweetchuck\Robo\Sass\SassTaskLoader;
 use Robo\Contract\TaskInterface;
 use Robo\Tasks;
 use Symfony\Component\Finder\Finder;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Cheppers\Robo\Sass\Task;
+namespace Sweetchuck\Robo\Sass\Task;
 
-use Cheppers\AssetJar\AssetJarAware;
-use Cheppers\AssetJar\AssetJarAwareInterface;
+use Sweetchuck\AssetJar\AssetJarAware;
+use Sweetchuck\AssetJar\AssetJarAwareInterface;
 use Robo\Task\BaseTask as RoboBaseTask;
 use Robo\TaskInfo;
 
