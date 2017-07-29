@@ -3,7 +3,7 @@
 namespace Sweetchuck\Robo\Sass\Tests\Unit\Task;
 
 use Sweetchuck\Robo\Sass\Task\SassCompileFilesTask;
-use Sweetchuck\Robo\Sass\Test\Helper\Dummy\Output as DummyOutput;
+use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyOutput;
 use Codeception\Test\Unit;
 use Codeception\Util\Stub;
 use Robo\Robo;
