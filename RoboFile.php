@@ -1,6 +1,5 @@
 <?php
 
-// @codingStandardsIgnoreStart
 use Sweetchuck\LintReport\Reporter\BaseReporter;
 use Sweetchuck\LintReport\Reporter\CheckstyleReporter;
 use League\Container\ContainerInterface;
@@ -13,7 +12,6 @@ use Symfony\Component\Yaml\Yaml;
 use Webmozart\PathUtil\Path;
 
 class RoboFile extends \Robo\Tasks
-    // @codingStandardsIgnoreEnd
 {
     use \Sweetchuck\Robo\Git\GitTaskLoader;
     use \Sweetchuck\Robo\Phpcs\PhpcsTaskLoader;
@@ -343,12 +341,8 @@ class RoboFile extends \Robo\Tasks
 
         $options = [
             'failOn' => 'warning',
-            'standards' => ['PSR2'],
             'lintReporters' => [
                 'lintVerboseReporter' => null,
-            ],
-            'ignore' => [
-                'src/GitHooks/',
             ],
         ];
 
@@ -361,7 +355,7 @@ class RoboFile extends \Robo\Tasks
         }
 
         if ($env !== 'git-hook') {
-            return $this->taskPhpcsLintFiles($options + ['files' => $files]);
+            return $this->taskPhpcsLintFiles($options);
         }
 
         return $this

@@ -276,6 +276,41 @@ class SassCompileFilesTaskTest extends Unit
                     ],
                 ],
             ],
+            'assetNamePrefix' => [
+                [
+                    'data' => [
+                        'my_anp:files' => [
+                            "$in/03.scss" => [
+                                'css' => implode("\n", [
+                                    '/* line 6, tests/_data/project-01/scss/03.scss */',
+                                    '.foo {',
+                                    '  width: 42px;',
+                                    '  height: 84px;',
+                                    '  display: none;',
+                                    '}',
+                                    '',
+                                ]),
+                                'map' => '',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'gemPaths' => [
+                        "$gemSetDir/gem-01",
+                        "$gemSetDir/gem-02",
+                        "$gemSetDir/gem-03",
+                    ],
+                    'files' => (new Finder())
+                        ->in($in)
+                        ->files()
+                        ->name('03.scss'),
+                    'includePaths' => [
+                        "$in/../../lib-01",
+                    ],
+                    'assetNamePrefix' => 'my_anp:',
+                ],
+            ],
         ];
     }
 
