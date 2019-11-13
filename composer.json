@@ -1,7 +1,7 @@
 {
     "name": "sweetchuck/robo-sass",
     "description": "Compile SCSS files with the 'sass' PHP extension.",
-    "license": "GPL-2.0",
+    "license": "GPL-2.0-or-later",
     "config": {
         "bin-dir": "bin",
         "sort-packages": true
@@ -10,18 +10,19 @@
     "prefer-stable": true,
     "require": {
         "php": ">=7.1",
-        "ext-sass": "^0.5",
+        "ext-sass": ">=0.5",
         "consolidation/robo": "^1.0",
         "webmozart/path-util": "^2.3"
     },
     "require-dev": {
         "codeception/codeception": "^2.2",
         "danielstjules/stringy": "^3.0",
-        "sweetchuck/codeception-module-robo-task-runner": "^0.0.1",
+        "squizlabs/php_codesniffer": "^3.5",
+        "sweetchuck/codeception-module-robo-task-runner": "^0.6",
         "sweetchuck/git-hooks": "^0.0",
         "sweetchuck/robo-git": "^0.0",
         "sweetchuck/robo-phpcs": "^0.0",
-        "symfony/finder": "^2.8 || ^3.2"
+        "symfony/finder": "^4.0"
     },
     "autoload": {
         "psr-4": {
