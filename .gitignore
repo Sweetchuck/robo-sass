@@ -8,3 +8,4 @@
 /tests/_support/_generated/
 
 /.git-hooks.local
+/SassRoboFile.php

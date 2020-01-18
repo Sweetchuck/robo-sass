@@ -36,4 +36,24 @@ class UtilsTest extends \Codeception\Test\Unit
     {
         $this->tester->assertEquals($expected, Utils::includePathsFromGemPaths($gemPaths));
     }
+
+    public function casesReplaceFileExtension(): array
+    {
+        return [
+            'empty 1' => ['', '', []],
+            'empty 2' => ['', '', ['sass' => 'css']],
+            'empty 3' => ['a.scss', 'a.scss', []],
+            'simple' => ['a.css', 'a.scss', ['scss' => 'css']],
+            'multiple 1' => ['a.css', 'a.scss', ['sass' => 'css', 'scss' => 'css']],
+            'multiple 2' => ['a.foo', 'a.scss', ['sass' => 'css', 'scss' => 'foo']],
+        ];
+    }
+
+    /**
+     * @dataProvider casesReplaceFileExtension
+     */
+    public function testReplaceFileExtension(string $expected, string $fileName, array $pairs): void
+    {
+        $this->tester->assertSame($expected, Utils::replaceFileExtension($fileName, $pairs));
+    }
 }

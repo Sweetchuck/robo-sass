@@ -2,27 +2,46 @@
     "name": "sweetchuck/robo-sass",
     "description": "Compile SCSS files with the 'sass' PHP extension.",
     "license": "GPL-2.0-or-later",
-    "config": {
-        "bin-dir": "bin",
-        "sort-packages": true
+    "authors": [
+        {
+            "name": "Dávid Andor",
+            "role": "Maintainer",
+            "homepage": "https://github.com/Sweetchuck"
+        }
+    ],
+    "homepage": "https://github.com/Sweetchuck/robo-sass",
+    "support": {
+        "source": "https://github.com/Sweetchuck/robo-sass",
+        "issues": "https://github.com/Sweetchuck/robo-sass/issues"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "config": {
+        "bin-dir": "bin",
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.2",
         "ext-sass": ">=0.5",
-        "consolidation/robo": "^1.0",
+        "consolidation/robo": "^2.0",
+        "symfony/filesystem": "^4.4",
         "webmozart/path-util": "^2.3"
     },
     "require-dev": {
-        "codeception/codeception": "^2.2",
-        "danielstjules/stringy": "^3.0",
+        "ext-json": "*",
+        "codeception/codeception": "^4.0",
+        "codeception/module-asserts": "^1.1",
+        "codeception/module-filesystem": "^1.0",
+        "danielstjules/stringy": "^3.1",
         "squizlabs/php_codesniffer": "^3.5",
-        "sweetchuck/codeception-module-robo-task-runner": "^0.6",
+        "sweetchuck/codeception-module-robo-task-runner": "^0.7",
         "sweetchuck/git-hooks": "^0.0",
-        "sweetchuck/robo-git": "^0.0",
-        "sweetchuck/robo-phpcs": "^0.0",
-        "symfony/finder": "^4.0"
+        "sweetchuck/robo-git": "^0.2",
+        "sweetchuck/robo-phpcs": "^0.1",
+        "symfony/error-handler": "^5.0",
+        "symfony/finder": "^4.4"
     },
     "autoload": {
         "psr-4": {
@@ -35,10 +54,7 @@
             "Sweetchuck\\Robo\\Sass\\Test\\Helper\\": "tests/_support/Helper/",
             "Sweetchuck\\Robo\\Sass\\Tests\\Acceptance\\": "tests/acceptance/",
             "Sweetchuck\\Robo\\Sass\\Tests\\Unit\\": "tests/unit/"
-        },
-        "classmap": [
-            "tests/_data/project-01/SassRoboFile.php"
-        ]
+        }
     },
     "scripts": {
         "post-install-cmd": [
