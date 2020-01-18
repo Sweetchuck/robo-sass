@@ -38,4 +38,16 @@ class Utils
 
         return null;
     }
+
+    public static function replaceFileExtension(string $fileName, array $pairs): string
+    {
+        $patterns = [];
+        $replacement = [];
+        foreach ($pairs as $old => $new) {
+            $patterns[] = '/\.' . preg_quote($old) . '$/';
+            $replacement = ".$new";
+        }
+
+        return preg_replace($patterns, $replacement, $fileName);
+    }
 }

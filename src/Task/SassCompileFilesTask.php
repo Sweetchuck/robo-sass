@@ -2,6 +2,9 @@
 
 namespace Sweetchuck\Robo\Sass\Task;
 
+use InvalidArgumentException;
+use Sass;
+use SassException;
 use Sweetchuck\Robo\Sass\Utils;
 use Robo\Result;
 use Symfony\Component\Filesystem\Filesystem;
@@ -78,7 +81,7 @@ class SassCompileFilesTask extends BaseTask
         } elseif ($style = array_search($value, $styles, true)) {
             $this->style = $style;
         } else {
-            throw new \InvalidArgumentException(sprintf('Invalid style identifier "%s"', $value), 1);
+            throw new InvalidArgumentException(sprintf('Invalid style identifier "%s"', $value), 1);
         }
 
         return $this;
@@ -298,48 +301,44 @@ class SassCompileFilesTask extends BaseTask
     {
         parent::setOptions($options);
 
-        foreach ($options as $name => $value) {
-            switch ($name) {
-                case 'gemPaths':
-                    $this->setGemPaths($value);
-                    break;
+        if (array_key_exists('gemPaths', $options)) {
+            $this->setGemPaths($options['gemPaths']);
+        }
 
-                case 'style':
-                    $this->setStyle($value);
-                    break;
+        if (array_key_exists('style', $options)) {
+            $this->setStyle($options['style']);
+        }
 
-                case 'includePaths':
-                    $this->setIncludePaths($value);
-                    break;
+        if (array_key_exists('includePaths', $options)) {
+            $this->setIncludePaths($options['includePaths']);
+        }
 
-                case 'precision':
-                    $this->setPrecision($value);
-                    break;
+        if (array_key_exists('precision', $options)) {
+            $this->setPrecision($options['precision']);
+        }
 
-                case 'comments':
-                    $this->setComments($value);
-                    break;
+        if (array_key_exists('comments', $options)) {
+            $this->setComments($options['comments']);
+        }
 
-                case 'indent':
-                    $this->setIndent($value);
-                    break;
+        if (array_key_exists('indent', $options)) {
+            $this->setIndent($options['indent']);
+        }
 
-                case 'embed':
-                    $this->setEmbed($value);
-                    break;
+        if (array_key_exists('embed', $options)) {
+            $this->setEmbed($options['embed']);
+        }
 
-                case 'files':
-                    $this->setFiles($value);
-                    break;
+        if (array_key_exists('files', $options)) {
+            $this->setFiles($options['files']);
+        }
 
-                case 'cssPath':
-                    $this->setCssPath($value);
-                    break;
+        if (array_key_exists('cssPath', $options)) {
+            $this->setCssPath($options['cssPath']);
+        }
 
-                case 'mapPath':
-                    $this->setMapPath($value);
-                    break;
-            }
+        if (array_key_exists('mapPath', $options)) {
+            $this->setMapPath($options['mapPath']);
         }
 
         return $this;
@@ -381,7 +380,7 @@ class SassCompileFilesTask extends BaseTask
         $this->sass->setComments($this->getComments());
         $this->sass->setIndent($this->getIndent());
         $this->sass->setEmbed($this->getEmbed());
-        
+
         $includePaths = $this->getIncludePaths();
         $gemPaths = $this->getGemPaths();
         if (is_iterable($gemPaths)) {
@@ -394,16 +393,24 @@ class SassCompileFilesTask extends BaseTask
         $cssPath = $this->getCssPath();
         $mapPath = $this->getMapPath();
 
+        $extensionPairs = [
+            'scss' => 'css',
+            'sass' => 'css',
+        ];
         foreach ($this->getFiles() as $file) {
             $relativePathnameSass = $file->getRelativePathname();
-            $relativePathnameCss = $this->cssFileName($relativePathnameSass);
+            $relativePathnameCss = Utils::replaceFileExtension($relativePathnameSass, $extensionPairs);
+            if ($relativePathnameSass === $relativePathnameCss) {
+                $relativePathnameCss = '.css';
+            }
+
             if ($mapPath) {
                 $this->sass->setMapPath("$mapPath/$relativePathnameSass");
             }
 
             try {
                 $compiled = $this->sass->compileFile($file->getPathname());
-            } catch (\SassException $e) {
+            } catch (SassException $e) {
                 if (!$this->sassException) {
                     $this->sassException = $e;
                 }
@@ -425,16 +432,24 @@ class SassCompileFilesTask extends BaseTask
 
             $this->assets['files'][$file->getPathname()] = $compiled;
 
-            if ($cssPath) {
-                $fileName = "$cssPath/$relativePathnameCss";
-                $this->fs->mkdir(Path::getDirectory($fileName));
-                file_put_contents($fileName, $compiled['css']);
+            $cssFileName = $cssPath ? "$cssPath/$relativePathnameCss" : '';
+            $mapFileName = $mapPath && $compiled['map'] ? "$mapPath/$relativePathnameCss.map" : '';
+
+            if ($cssFileName && $mapFileName) {
+                $compiled['css'] .= sprintf(
+                    "\n/*# sourceMappingURL=%s */\n",
+                    Path::makeRelative($mapFileName, Path::getDirectory($cssFileName))
+                );
             }
 
-            if ($mapPath && $compiled['map']) {
-                $fileName = "$mapPath/$relativePathnameCss.map";
-                $this->fs->mkdir(Path::getDirectory($fileName));
-                file_put_contents($fileName, $compiled['map']);
+            if ($cssFileName) {
+                $this->fs->mkdir(Path::getDirectory($cssFileName));
+                $this->fs->dumpFile($cssFileName, $compiled['css']);
+            }
+
+            if ($mapFileName) {
+                $this->fs->mkdir(Path::getDirectory($mapFileName));
+                $this->fs->dumpFile($mapFileName, $compiled['map']);
             }
         }
 
@@ -460,26 +475,16 @@ class SassCompileFilesTask extends BaseTask
         return Result::success($this, '', $data);
     }
 
-    protected function cssFileName(string $sassFileName): string
-    {
-        $extension = pathinfo($sassFileName, PATHINFO_EXTENSION);
-        if ($extension === 'sass' || $extension === 'scss') {
-            return substr($sassFileName, 0, -4) . 'css';
-        }
-
-        return "$sassFileName.css";
-    }
-
     /**
      * @return int[]
      */
     public function validStyles(): array
     {
         return [
-            'nested' => \Sass::STYLE_NESTED,
-            'expanded' => \Sass::STYLE_EXPANDED,
-            'compact' => \Sass::STYLE_COMPACT,
-            'compressed' => \Sass::STYLE_COMPRESSED,
+            'nested' => Sass::STYLE_NESTED,
+            'expanded' => Sass::STYLE_EXPANDED,
+            'compact' => Sass::STYLE_COMPACT,
+            'compressed' => Sass::STYLE_COMPRESSED,
         ];
     }
 }

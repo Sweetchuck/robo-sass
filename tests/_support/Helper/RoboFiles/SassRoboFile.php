@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types = 1);
+
+namespace Sweetchuck\Robo\Sass\Test\Helper\RoboFiles;
+
 use Sweetchuck\Robo\Sass\SassTaskLoader;
 use Robo\Contract\TaskInterface;
 use Robo\Tasks;
@@ -10,6 +14,7 @@ class SassRoboFile extends Tasks
     use SassTaskLoader;
 
     public function compileFiles(
+        string $directory,
         string $name,
         array $options = [
             'style' => 'expanded',
@@ -23,7 +28,7 @@ class SassRoboFile extends Tasks
         ]
     ): TaskInterface {
         $files = (new Finder())
-            ->in(__DIR__ . '/scss')
+            ->in($directory)
             ->files()
             ->name($name);
 

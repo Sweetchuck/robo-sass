@@ -2,61 +2,67 @@
 
 namespace Sweetchuck\Robo\Sass\Tests\Unit\Task;
 
+use InvalidArgumentException;
+use Sass;
 use Sweetchuck\Robo\Sass\Task\SassCompileFilesTask;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyOutput;
-use Codeception\Test\Unit;
 use Codeception\Util\Stub;
 use Robo\Robo;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
-class SassCompileFilesTaskTest extends Unit
+class SassCompileFilesTaskTest extends TaskTestBase
 {
+
     /**
-     * @var \Sweetchuck\Robo\Sass\Test\UnitTester
+     * @var \Sweetchuck\Robo\Sass\Task\SassCompileFilesTask
      */
-    protected $tester;
+    protected $task;
+
+    protected function initTask()
+    {
+        $this->task = $this->taskBuilder->taskSassCompile();
+    }
 
     public function testGetSetStyle(): void
     {
-        $task = new SassCompileFilesTask();
-        $task->setStyle('nested');
-        $this->tester->assertEquals('nested', $task->getStyle());
-        $this->tester->assertEquals(\Sass::STYLE_NESTED, $task->getStyleNumeric());
+        $this->task->setStyle('nested');
+        $this->tester->assertEquals('nested', $this->task->getStyle());
+        $this->tester->assertEquals(Sass::STYLE_NESTED, $this->task->getStyleNumeric());
 
-        $task->setStyle(2);
-        $this->tester->assertEquals('compact', $task->getStyle());
-        $this->tester->assertEquals(\Sass::STYLE_COMPACT, $task->getStyleNumeric());
+        $this->task->setStyle(2);
+        $this->tester->assertEquals('compact', $this->task->getStyle());
+        $this->tester->assertEquals(Sass::STYLE_COMPACT, $this->task->getStyleNumeric());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionCode 1
-     * @expectedExceptionMessage Invalid style identifier "42"
-     */
     public function testSetStyleInvalidNumber(): void
     {
-        $task = new SassCompileFilesTask();
-        $task->setStyle(0);
-        $task->setStyle(1);
-        $task->setStyle(2);
-        $task->setStyle(3);
-        $task->setStyle(42);
+        $this->task->setStyle(0);
+        $this->task->setStyle(1);
+        $this->task->setStyle(2);
+        $this->task->setStyle(3);
+
+        $this->tester->expectThrowable(
+            new InvalidArgumentException('Invalid style identifier "42"', 1),
+            function () {
+                $this->task->setStyle(42);
+            }
+        );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionCode 1
-     * @expectedExceptionMessage Invalid style identifier "foo"
-     */
     public function testSetStyleInvalidName(): void
     {
-        $task = new SassCompileFilesTask();
-        $task->setStyle('nested');
-        $task->setStyle('expanded');
-        $task->setStyle('compact');
-        $task->setStyle('compressed');
-        $task->setStyle('foo');
+        $this->task->setStyle('nested');
+        $this->task->setStyle('expanded');
+        $this->task->setStyle('compact');
+        $this->task->setStyle('compressed');
+
+        $this->tester->expectThrowable(
+            new InvalidArgumentException('Invalid style identifier "foo"', 1),
+            function () {
+                $this->task->setStyle('foo');
+            }
+        );
     }
 
     public function casesRunSuccess(): array
@@ -324,18 +330,10 @@ class SassCompileFilesTaskTest extends Unit
             'data' => [],
         ];
 
-        $config = [
-            'verbosity' => OutputInterface::VERBOSITY_DEBUG,
-            'colors' => false,
-        ];
-        $stdOutput = new DummyOutput($config);
-        $containerBackup = Robo::hasContainer() ? Robo::getContainer() : null;
-        $container = Robo::createDefaultContainer(null, $stdOutput);
-        $container->add('output', $stdOutput, false);
-        Robo::setContainer($container);
-
-        $task = new SassCompileFilesTask($options);
-        $result = $task->run();
+        $result = $this
+            ->task
+            ->setOptions($options)
+            ->run();
 
         $this->tester->assertEquals(
             $expected['exitCode'],
@@ -348,12 +346,6 @@ class SassCompileFilesTaskTest extends Unit
                 $result[$name],
                 "Asset in result[$name]"
             );
-        }
-
-        if ($containerBackup) {
-            Robo::setContainer($containerBackup);
-        } else {
-            Robo::unsetContainer();
         }
     }
 
@@ -382,26 +374,15 @@ class SassCompileFilesTaskTest extends Unit
      */
     public function testRunFail(array $expected, array $options)
     {
-        $config = [
-            'verbosity' => OutputInterface::VERBOSITY_DEBUG,
-            'colors' => false,
-        ];
-        $stdOutput = new DummyOutput($config);
-        $containerBackup = Robo::hasContainer() ? Robo::getContainer() : null;
-        $container = Robo::createDefaultContainer(null, $stdOutput);
-        $container->add('output', $stdOutput, false);
-        Robo::setContainer($container);
+        $result = $this
+            ->task
+            ->setOptions($options)
+            ->run();
 
-        $task = new SassCompileFilesTask($options);
-        $result = $task->run();
-
-        $this->tester->assertEquals($expected['exitCode'], $result->getExitCode());
-
-        if ($containerBackup) {
-            Robo::setContainer($containerBackup);
-        } else {
-            Robo::unsetContainer();
-        }
+        $this->tester->assertEquals(
+            $expected['exitCode'],
+            $result->getExitCode()
+        );
     }
 
     public function casesCssFileName(): array
@@ -413,28 +394,17 @@ class SassCompileFilesTaskTest extends Unit
         ];
     }
 
-    /**
-     * @dataProvider casesCssFileName
-     */
-    public function testCssFileName(string $expected, string $sassFileName): void
-    {
-        $task = Stub::construct(SassCompileFilesTask::class);
-        $class = new \ReflectionClass(SassCompileFilesTask::class);
-        $cssFileName = $class->getMethod('cssFileName');
-        $cssFileName->setAccessible(true);
-
-        $this->tester->assertEquals($expected, $cssFileName->invoke($task, $sassFileName));
-    }
-
     public function testGetSetIncludePaths(): void
     {
-        $task = new SassCompileFilesTask(['includePaths' => ['a', 'b']]);
-        $this->tester->assertEquals(['a' => true, 'b' => true], $task->getIncludePaths());
+        $options = ['includePaths' => ['a', 'b']];
+        $this->task->setOptions($options);
 
-        $task->removeIncludePath('a');
-        $this->tester->assertEquals(['b' => true], $task->getIncludePaths());
+        $this->tester->assertEquals(['a' => true, 'b' => true], $this->task->getIncludePaths());
 
-        $task->addIncludePath('c');
-        $this->tester->assertEquals(['b' => true, 'c' => true], $task->getIncludePaths());
+        $this->task->removeIncludePath('a');
+        $this->tester->assertEquals(['b' => true], $this->task->getIncludePaths());
+
+        $this->task->addIncludePath('c');
+        $this->tester->assertEquals(['b' => true, 'c' => true], $this->task->getIncludePaths());
     }
 }
