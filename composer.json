@@ -23,7 +23,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.4",
         "ext-sass": ">=0.5",
         "consolidation/robo": "^2.0",
         "symfony/filesystem": "^4.4",
@@ -36,10 +36,10 @@
         "codeception/module-filesystem": "^1.0",
         "danielstjules/stringy": "^3.1",
         "squizlabs/php_codesniffer": "^3.5",
-        "sweetchuck/codeception-module-robo-task-runner": "^0.7",
-        "sweetchuck/git-hooks": "^0.0",
-        "sweetchuck/robo-git": "^0.2",
-        "sweetchuck/robo-phpcs": "^0.1",
+        "sweetchuck/codeception-module-robo-task-runner": "1.x-dev",
+        "sweetchuck/git-hooks": "2.x-dev",
+        "sweetchuck/robo-git": "1.x-dev",
+        "sweetchuck/robo-phpcs": "1.x-dev",
         "symfony/error-handler": "^5.0",
         "symfony/finder": "^4.4"
     },
@@ -56,12 +56,7 @@
             "Sweetchuck\\Robo\\Sass\\Tests\\Unit\\": "tests/unit/"
         }
     },
-    "scripts": {
-        "post-install-cmd": [
-            "\\Sweetchuck\\Robo\\Sass\\Composer\\Scripts::postInstallCmd"
-        ],
-        "post-update-cmd": [
-            "\\Sweetchuck\\Robo\\Sass\\Composer\\Scripts::postUpdateCmd"
-        ]
-    }
+    "scripts": {},
+    "scripts-descriptions": {},
+    "extra": {}
 }
