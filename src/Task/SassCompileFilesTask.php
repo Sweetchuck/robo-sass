@@ -378,7 +378,10 @@ class SassCompileFilesTask extends BaseTask
         $this->sass->setStyle($this->getStyleNumeric());
         $this->sass->setPrecision($this->getPrecision());
         $this->sass->setComments($this->getComments());
-        $this->sass->setIndent($this->getIndent());
+        // @link https://github.com/sensational/sassphp/issues/42
+        if (method_exists($this->sass, 'setIndent')) {
+            $this->sass->setIndent($this->getIndent());
+        }
         $this->sass->setEmbed($this->getEmbed());
 
         $includePaths = $this->getIncludePaths();

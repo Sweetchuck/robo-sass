@@ -91,8 +91,9 @@ class SassCompileFilesTaskCest
         );
         $I->assertEquals(1, $I->getRoboTaskExitCode($id));
         $I->assertEquals('', $I->getRoboTaskStdOutput($id));
-        $I->assertContains(" [Sass::compile] Compile files\n", $I->getRoboTaskStdError($id));
-        $I->assertContains(
+        $I->assertStringContainsString(" [Sass::compile] Compile files\n", $I->getRoboTaskStdError($id));
+        $I->assertStringContainsString(" [Sass::compile] Compile files\n", $I->getRoboTaskStdError($id));
+        $I->assertStringContainsString(
             'Error: Invalid CSS after "  color: #ffffff;": expected "}", was ""',
             $I->getRoboTaskStdError($id)
         );
