@@ -26,7 +26,7 @@
         "php": ">=7.4",
         "ext-sass": ">=0.5",
         "consolidation/robo": "^2.0",
-        "symfony/filesystem": "^4.4",
+        "symfony/filesystem": "^5.0 || ^6.0",
         "webmozart/path-util": "^2.3"
     },
     "require-dev": {
@@ -40,8 +40,8 @@
         "sweetchuck/git-hooks": "2.x-dev",
         "sweetchuck/robo-git": "1.x-dev",
         "sweetchuck/robo-phpcs": "1.x-dev",
-        "symfony/error-handler": "^5.0",
-        "symfony/finder": "^4.4"
+        "symfony/error-handler": "^5.0 || ^6.0",
+        "symfony/finder": "^5.0 || ^6.0"
     },
     "autoload": {
         "psr-4": {
@@ -50,7 +50,6 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Sweetchuck\\Robo\\Sass\\Composer\\": "src-dev/Composer/",
             "Sweetchuck\\Robo\\Sass\\Test\\Helper\\": "tests/_support/Helper/",
             "Sweetchuck\\Robo\\Sass\\Tests\\Acceptance\\": "tests/acceptance/",
             "Sweetchuck\\Robo\\Sass\\Tests\\Unit\\": "tests/unit/"
