@@ -1,9 +1,10 @@
 # Robo task wrapper for Sass
 
-[![Build Status](https://travis-ci.org/Sweetchuck/robo-sass.svg?branch=master)](https://travis-ci.org/Sweetchuck/robo-sass)
-[![codecov](https://codecov.io/gh/Sweetchuck/robo-sass/branch/master/graph/badge.svg)](https://codecov.io/gh/Sweetchuck/robo-sass)
+[![CircleCI](https://circleci.com/gh/Sweetchuck/robo-sass/tree/1.x.svg?style=svg)](https://circleci.com/gh/Sweetchuck/robo-sass/?branch=1.x)
+[![codecov](https://codecov.io/gh/Sweetchuck/robo-sass/branch/1.x/graph/badge.svg?token=HSF16OGPyr)](https://app.codecov.io/gh/Sweetchuck/robo-sass/branch/1.x)
 
 Compile SASS/SCSS files with [sass PHP extension](https://github.com/jamierumbelow/sassphp)
+
 
 ## Example
 
@@ -22,7 +23,7 @@ class RoboFile extends Tasks
     public function sassCompile(): TaskInterface
     {
         $files = (new Finder())
-            ->in(__DIR__ . '/scss')
+            ->in('./scss')
             ->name('/^[^_].*\.(sass|scss)$/')
             ->files();
 
