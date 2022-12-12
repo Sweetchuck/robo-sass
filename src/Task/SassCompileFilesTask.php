@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Sweetchuck\Robo\Sass\Task;
 
 use InvalidArgumentException;
@@ -8,38 +10,40 @@ use SassException;
 use Sweetchuck\Robo\Sass\Utils;
 use Robo\Result;
 use Symfony\Component\Filesystem\Filesystem;
-use Webmozart\PathUtil\Path;
+use Symfony\Component\Filesystem\Path;
 
 class SassCompileFilesTask extends BaseTask
 {
     /**
      * {@inheritdoc}
      */
-    protected $taskName = 'Sass::compile';
+    protected string $taskName = 'Sass::compile';
 
     /**
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     protected $fs = null;
 
-    /**
-     * @var \SassException
-     */
-    protected $sassException = null;
+    protected ?\SassException $sassException = null;
 
     // region Options.
     // region Option - gemPaths.
     /**
-     * @var array
+     * @var array<string>
      */
-    protected $gemPaths = [];
+    protected array $gemPaths = [];
 
+    /**
+     * @return array<string>
+     */
     public function getGemPaths(): array
     {
         return $this->gemPaths;
     }
 
     /**
+     * @param array<string> $value
+     *
      * @return $this
      */
     public function setGemPaths(array $value)
@@ -51,10 +55,7 @@ class SassCompileFilesTask extends BaseTask
     // endregion
 
     // region Option - style.
-    /**
-     * @var string
-     */
-    protected $style = 'expanded';
+    protected string $style = 'expanded';
 
     public function getStyle(): string
     {
@@ -67,9 +68,11 @@ class SassCompileFilesTask extends BaseTask
     }
 
     /**
+     * @param int|string $value
+     *
      * @return $this
      */
-    public function setStyle(string $value)
+    public function setStyle($value)
     {
         if (is_numeric($value)) {
             $value = (int) $value;
@@ -90,16 +93,21 @@ class SassCompileFilesTask extends BaseTask
 
     // region Option - includePaths.
     /**
-     * @var array
+     * @var array<string, bool>
      */
-    protected $includePaths = [];
+    protected array $includePaths = [];
 
+    /**
+     * @return array<string, bool>
+     */
     public function getIncludePaths(): array
     {
         return $this->includePaths;
     }
 
     /**
+     * @param array<string>|array<string, bool> $paths
+     *
      * @return $this
      */
     public function setIncludePaths(array $paths)
@@ -135,10 +143,7 @@ class SassCompileFilesTask extends BaseTask
     // endregion
 
     // region Option - precision.
-    /**
-     * @var int
-     */
-    protected $precision = 5;
+    protected int $precision = 5;
 
     public function getPrecision(): int
     {
@@ -157,10 +162,7 @@ class SassCompileFilesTask extends BaseTask
     // endregion
 
     // region Option - comments.
-    /**
-     * @var bool
-     */
-    protected $comments = true;
+    protected bool $comments = true;
 
     public function getComments(): bool
     {
@@ -179,10 +181,7 @@ class SassCompileFilesTask extends BaseTask
     // endregion
 
     // region Option - indent.
-    /**
-     * @var int
-     */
-    protected $indent = 2;
+    protected int $indent = 2;
 
     public function getIndent(): int
     {
@@ -201,10 +200,7 @@ class SassCompileFilesTask extends BaseTask
     // endregion
 
     // region Option - embed.
-    /**
-     * @var bool
-     */
-    protected $embed = false;
+    protected bool $embed = false;
 
     public function getEmbed(): bool
     {
@@ -224,12 +220,12 @@ class SassCompileFilesTask extends BaseTask
 
     // region Option - files.
     /**
-     * @var \Symfony\Component\Finder\Finder|\Symfony\Component\Finder\SplFileInfo[]
+     * @var iterable<\Symfony\Component\Finder\SplFileInfo>
      */
-    protected $files = [];
+    protected iterable $files = [];
 
     /**
-     * @return \Symfony\Component\Finder\Finder|\Symfony\Component\Finder\SplFileInfo[]
+     * @return iterable<\Symfony\Component\Finder\SplFileInfo>
      */
     public function getFiles()
     {
@@ -237,7 +233,7 @@ class SassCompileFilesTask extends BaseTask
     }
 
     /**
-     * @param \Symfony\Component\Finder\Finder|\Symfony\Component\Finder\SplFileInfo[] $value
+     * @param iterable<\Symfony\Component\Finder\SplFileInfo> $value
      *
      * @return $this
      */
@@ -250,10 +246,7 @@ class SassCompileFilesTask extends BaseTask
     // endregion
 
     // region Option - cssPath.
-    /**
-     * @var string
-     */
-    protected $cssPath = '';
+    protected string $cssPath = '';
 
     public function getCssPath(): string
     {
@@ -272,10 +265,7 @@ class SassCompileFilesTask extends BaseTask
     // endregion
 
     // region Option - mapPath.
-    /**
-     * @var string
-     */
-    protected $mapPath = '';
+    protected string $mapPath = '';
 
     public function getMapPath(): string
     {
@@ -479,7 +469,7 @@ class SassCompileFilesTask extends BaseTask
     }
 
     /**
-     * @return int[]
+     * @return array<string, int>
      */
     public function validStyles(): array
     {

@@ -1,9 +1,15 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Sweetchuck\Robo\Sass;
 
 class Utils
 {
+
+    /**
+     * @var array<string>
+     */
     public static $includePathSuggestions = [
         'stylesheets',
         'sass',
@@ -11,9 +17,9 @@ class Utils
     ];
 
     /**
-     * @param string[] $gemPaths
+     * @param array<string> $gemPaths
      *
-     * @return string[]
+     * @return array<string>
      */
     public static function includePathsFromGemPaths(iterable $gemPaths): array
     {
@@ -39,6 +45,10 @@ class Utils
         return null;
     }
 
+    /**
+     * @param string $fileName
+     * @param array<string, string> $pairs
+     */
     public static function replaceFileExtension(string $fileName, array $pairs): string
     {
         $patterns = [];

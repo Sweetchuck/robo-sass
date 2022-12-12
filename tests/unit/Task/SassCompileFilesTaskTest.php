@@ -1,38 +1,34 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Sweetchuck\Robo\Sass\Tests\Unit\Task;
 
 use InvalidArgumentException;
-use Sass;
-use Sweetchuck\Robo\Sass\Task\SassCompileFilesTask;
-use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyOutput;
-use Codeception\Util\Stub;
-use Robo\Robo;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
+/**
+ * @property \Sweetchuck\Robo\Sass\Task\SassCompileFilesTask|\Robo\Collection\CollectionBuilder $task
+ */
 class SassCompileFilesTaskTest extends TaskTestBase
 {
-
-    /**
-     * @var \Sweetchuck\Robo\Sass\Task\SassCompileFilesTask
-     */
-    protected $task;
 
     protected function initTask()
     {
         $this->task = $this->taskBuilder->taskSassCompile();
+
+        return $this;
     }
 
     public function testGetSetStyle(): void
     {
         $this->task->setStyle('nested');
         $this->tester->assertEquals('nested', $this->task->getStyle());
-        $this->tester->assertEquals(Sass::STYLE_NESTED, $this->task->getStyleNumeric());
+        $this->tester->assertEquals(\Sass::STYLE_NESTED, $this->task->getStyleNumeric());
 
         $this->task->setStyle(2);
         $this->tester->assertEquals('compact', $this->task->getStyle());
-        $this->tester->assertEquals(Sass::STYLE_COMPACT, $this->task->getStyleNumeric());
+        $this->tester->assertEquals(\Sass::STYLE_COMPACT, $this->task->getStyleNumeric());
     }
 
     public function testSetStyleInvalidNumber(): void
@@ -65,6 +61,9 @@ class SassCompileFilesTaskTest extends TaskTestBase
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function casesRunSuccess(): array
     {
         $gemSetDir = rtrim(codecept_data_dir(), DIRECTORY_SEPARATOR);
@@ -321,9 +320,12 @@ class SassCompileFilesTaskTest extends TaskTestBase
     }
 
     /**
+     * @param array<string, mixed> $expected
+     * @param array<string, mixed> $options
+     *
      * @dataProvider casesRunSuccess
      */
-    public function testRunSuccess(array $expected, array $options)
+    public function testRunSuccess(array $expected, array $options): void
     {
         $expected += [
             'exitCode' => 0,
@@ -349,6 +351,9 @@ class SassCompileFilesTaskTest extends TaskTestBase
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function casesRunFail(): array
     {
         $in = codecept_data_dir('project-01/scss');
@@ -370,9 +375,12 @@ class SassCompileFilesTaskTest extends TaskTestBase
     }
 
     /**
+     * @param array<string, mixed> $expected
+     * @param array<string, mixed> $options
+     *
      * @dataProvider casesRunFail
      */
-    public function testRunFail(array $expected, array $options)
+    public function testRunFail(array $expected, array $options): void
     {
         $result = $this
             ->task
@@ -385,6 +393,9 @@ class SassCompileFilesTaskTest extends TaskTestBase
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function casesCssFileName(): array
     {
         return [

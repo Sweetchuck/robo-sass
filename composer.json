@@ -17,7 +17,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
-        "bin-dir": "bin",
+        "allow-plugins": {
+            "sweetchuck/git-hooks": true
+        },
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true
@@ -26,8 +28,7 @@
         "php": ">=7.4",
         "ext-sass": ">=0.5",
         "consolidation/robo": "^3.0",
-        "symfony/filesystem": "^5.0 || ^6.0",
-        "webmozart/path-util": "^2.3"
+        "symfony/filesystem": "^5.0 || ^6.0"
     },
     "require-dev": {
         "ext-json": "*",
@@ -35,11 +36,16 @@
         "codeception/module-asserts": "^1.1",
         "codeception/module-filesystem": "^1.0",
         "danielstjules/stringy": "^3.1",
+        "nuvoleweb/robo-config": "^2.0",
+        "phpstan/phpstan": "^1.9",
+        "psr/container": "^1.0",
         "squizlabs/php_codesniffer": "^3.5",
         "sweetchuck/codeception-module-robo-task-runner": "2.x-dev",
         "sweetchuck/git-hooks": "2.x-dev",
         "sweetchuck/robo-git": "2.x-dev",
         "sweetchuck/robo-phpcs": "2.x-dev",
+        "sweetchuck/robo-phpstan": "1.x-dev",
+        "sweetchuck/utils": "1.x-dev",
         "symfony/error-handler": "^5.0 || ^6.0",
         "symfony/finder": "^5.0 || ^6.0"
     },
@@ -50,7 +56,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Sweetchuck\\Robo\\Sass\\Test\\Helper\\": "tests/_support/Helper/",
+            "Sweetchuck\\Robo\\Sass\\Test\\": "tests/_support/",
             "Sweetchuck\\Robo\\Sass\\Tests\\Acceptance\\": "tests/acceptance/",
             "Sweetchuck\\Robo\\Sass\\Tests\\Unit\\": "tests/unit/"
         }

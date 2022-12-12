@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Sweetchuck\Robo\Sass\Task;
 
 use Robo\Task\BaseTask as RoboBaseTask;
@@ -7,31 +9,19 @@ use Robo\TaskInfo;
 
 abstract class BaseTask extends RoboBaseTask
 {
-    /**
-     * @var string
-     */
-    protected $sassClass = \Sass::class;
+    protected string $sassClass = \Sass::class;
+
+    protected ?\Sass $sass = null;
+
+    protected string $taskName = 'Sass';
 
     /**
-     * @var \Sass
+     * @var array<string, mixed>
      */
-    protected $sass = null;
-
-    /**
-     * @var string
-     */
-    protected $taskName = 'Sass';
-
-    /**
-     * @var array
-     */
-    protected $assets = [];
+    protected array $assets = [];
 
     // region Option - assetNamePrefix.
-    /**
-     * @var string
-     */
-    protected $assetNamePrefix = '';
+    protected string $assetNamePrefix = '';
 
     public function getAssetNamePrefix(): string
     {
@@ -50,7 +40,7 @@ abstract class BaseTask extends RoboBaseTask
     // endregion
 
     /**
-     * {@inheritdoc}
+     * @param array<string, mixed> $options
      */
     public function __construct(array $options = [])
     {
@@ -58,6 +48,8 @@ abstract class BaseTask extends RoboBaseTask
     }
 
     /**
+     * @param array<string, mixed> $options
+     *
      * @return $this
      */
     public function setOptions(array $options)
@@ -79,7 +71,9 @@ abstract class BaseTask extends RoboBaseTask
     }
 
     /**
-     * {@inheritdoc}
+     * @param null|array<string, mixed> $context
+     *
+     * @return array<string, mixed>
      */
     protected function getTaskContext($context = null)
     {
