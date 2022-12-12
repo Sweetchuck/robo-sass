@@ -1,0 +1,16 @@
+parameters:
+    typeAliases:
+        dev-php-executable-array: '''
+            array{
+                enabled: bool,
+                command: string,
+                envVars?: array<string, ?string>,
+            }
+        '''
+        dev-robo-sass-process-result: '''
+            array{
+                exitCode: int,
+                stdOutput: string,
+                stdError: string,
+            }
+        '''

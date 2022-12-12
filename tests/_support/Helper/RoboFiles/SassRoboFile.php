@@ -13,6 +13,11 @@ class SassRoboFile extends Tasks
 {
     use SassTaskLoader;
 
+    /**
+     * @param mixed[] $options
+     *
+     * @return \Robo\Contract\TaskInterface
+     */
     public function compileFiles(
         string $directory,
         string $name,
@@ -31,6 +36,9 @@ class SassRoboFile extends Tasks
             ->in($directory)
             ->files()
             ->name($name);
+
+        settype($options['indent'], 'int');
+        settype($options['precision'], 'int');
 
         return $this
             ->taskSassCompile($options)

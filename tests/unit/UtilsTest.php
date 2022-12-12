@@ -1,16 +1,20 @@
 <?php
 
-namespace Sweetchuck\Robo\Sass\Test;
+declare(strict_types = 1);
 
+namespace Sweetchuck\Robo\Sass\Tests\Unit;
+
+use Codeception\Test\Unit;
+use Sweetchuck\Robo\Sass\Test\UnitTester;
 use Sweetchuck\Robo\Sass\Utils;
 
-class UtilsTest extends \Codeception\Test\Unit
+class UtilsTest extends Unit
 {
-    /**
-     * @var \Sweetchuck\Robo\Sass\Test\UnitTester
-     */
-    protected $tester;
+    protected UnitTester $tester;
 
+    /**
+     * @return array<string, mixed>
+     */
     public function casesIncludePathsFromGemPaths(): array
     {
         $gemSetDir = rtrim(codecept_data_dir(), DIRECTORY_SEPARATOR);
@@ -30,6 +34,9 @@ class UtilsTest extends \Codeception\Test\Unit
     }
 
     /**
+     * @param array<mixed> $expected
+     * @param array<string> $gemPaths
+     *
      * @dataProvider casesIncludePathsFromGemPaths
      */
     public function testIncludePathsFromGemPaths(array $expected, array $gemPaths): void
@@ -37,6 +44,9 @@ class UtilsTest extends \Codeception\Test\Unit
         $this->tester->assertEquals($expected, Utils::includePathsFromGemPaths($gemPaths));
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function casesReplaceFileExtension(): array
     {
         return [
@@ -50,6 +60,10 @@ class UtilsTest extends \Codeception\Test\Unit
     }
 
     /**
+     * @param string $expected
+     * @param string $fileName
+     * @param array<string, string> $pairs
+     *
      * @dataProvider casesReplaceFileExtension
      */
     public function testReplaceFileExtension(string $expected, string $fileName, array $pairs): void

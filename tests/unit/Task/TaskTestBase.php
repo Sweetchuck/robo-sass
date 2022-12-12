@@ -8,46 +8,34 @@ use Codeception\Test\Unit;
 use League\Container\Container as LeagueContainer;
 use Robo\Collection\CollectionBuilder;
 use Robo\Config\Config;
+use Robo\Config\Config as RoboConfig;
 use Robo\Robo;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyOutput;
+use Sweetchuck\Robo\Sass\Task\BaseTask;
 use Sweetchuck\Robo\Sass\Test\Helper\Dummy\DummyTaskBuilder;
+use Sweetchuck\Robo\Sass\Test\UnitTester;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\ErrorHandler\BufferingLogger;
 
 abstract class TaskTestBase extends Unit
 {
-    /**
-     * @var \League\Container\ContainerInterface
-     */
-    protected $container;
+    protected LeagueContainer $container;
+
+    protected RoboConfig $config;
+
+    protected CollectionBuilder $builder;
+
+    protected UnitTester $tester;
 
     /**
-     * @var \Robo\Config\Config
-     */
-    protected $config;
-
-    /**
-     * @var \Robo\Collection\CollectionBuilder
-     */
-    protected $builder;
-
-    /**
-     * @var \Sweetchuck\Robo\Sass\Test\UnitTester
-     */
-    protected $tester;
-
-    /**
-     * @var \Sweetchuck\Robo\Sass\Task\BaseTask
+     * @var \Sweetchuck\Robo\Sass\Task\BaseTask|\Robo\Collection\CollectionBuilder
      */
     protected $task;
 
-    /**
-     * @var \Sweetchuck\Robo\Sass\Test\Helper\Dummy\DummyTaskBuilder
-     */
-    protected $taskBuilder;
+    protected DummyTaskBuilder $taskBuilder;
 
     /**
-     * @inheritdoc
+     * @phpstan-return void
      */
     public function _before()
     {
@@ -66,7 +54,7 @@ abstract class TaskTestBase extends Unit
         $this->container->add('container', $this->container);
 
         Robo::configureContainer($this->container, $application, $this->config, $input, $output);
-        $this->container->share('logger', BufferingLogger::class);
+        $this->container->addShared('logger', BufferingLogger::class);
 
         $this->builder = CollectionBuilder::create($this->container, null);
         $this->taskBuilder = new DummyTaskBuilder();

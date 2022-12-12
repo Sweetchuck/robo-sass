@@ -11,14 +11,11 @@ use Symfony\Component\Filesystem\Filesystem;
 class SassCompileFilesTaskCest
 {
     /**
-     * @var string[]
+     * @var array<string>
      */
-    protected $tmpDirs = [];
+    protected array $tmpDirs = [];
 
-    /**
-     * @var \Symfony\Component\Filesystem\Filesystem
-     */
-    protected $fs = null;
+    protected Filesystem $fs;
 
     public function __construct()
     {
@@ -30,7 +27,7 @@ class SassCompileFilesTaskCest
         $this->fs->remove($this->tmpDirs);
     }
 
-    public function runCompileFilesSuccess(AcceptanceTester $I)
+    public function runCompileFilesSuccess(AcceptanceTester $I): void
     {
         $tmpDir = $this->createTmpDir();
 
@@ -75,7 +72,7 @@ class SassCompileFilesTaskCest
         //);
     }
 
-    public function runCompileFilesFail(AcceptanceTester $I)
+    public function runCompileFilesFail(AcceptanceTester $I): void
     {
         $tmpDir = $this->createTmpDir();
 
