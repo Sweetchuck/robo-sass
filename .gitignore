@@ -5,9 +5,14 @@
 /tests/_data/scss/**/*.css.map
 /tests/_log/
 /tests/_support/_generated/
+/tests/*.suite.yml
+/codeception.yml
 
 /.git-hooks.local
-/robo.yml
-/SassRoboFile.php
+
+/phpcs.xml
 
 /phpstan.neon
+
+/robo.yml
+/SassRoboFile.php
