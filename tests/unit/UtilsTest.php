@@ -4,8 +4,9 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Sass\Tests\Unit;
 
+use Codeception\Attribute\DataProvider;
 use Codeception\Test\Unit;
-use Sweetchuck\Robo\Sass\Test\UnitTester;
+use Sweetchuck\Robo\Sass\Tests\UnitTester;
 use Sweetchuck\Robo\Sass\Utils;
 
 class UtilsTest extends Unit
@@ -36,9 +37,8 @@ class UtilsTest extends Unit
     /**
      * @param array<mixed> $expected
      * @param array<string> $gemPaths
-     *
-     * @dataProvider casesIncludePathsFromGemPaths
      */
+    #[DataProvider('casesIncludePathsFromGemPaths')]
     public function testIncludePathsFromGemPaths(array $expected, array $gemPaths): void
     {
         $this->tester->assertEquals($expected, Utils::includePathsFromGemPaths($gemPaths));
@@ -63,9 +63,8 @@ class UtilsTest extends Unit
      * @param string $expected
      * @param string $fileName
      * @param array<string, string> $pairs
-     *
-     * @dataProvider casesReplaceFileExtension
      */
+    #[DataProvider('casesReplaceFileExtension')]
     public function testReplaceFileExtension(string $expected, string $fileName, array $pairs): void
     {
         $this->tester->assertSame($expected, Utils::replaceFileExtension($fileName, $pairs));

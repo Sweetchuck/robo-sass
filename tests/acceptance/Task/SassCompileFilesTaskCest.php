@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Sass\Tests\Acceptance\Task;
 
-use Sweetchuck\Robo\Sass\Test\AcceptanceTester;
-use Sweetchuck\Robo\Sass\Test\Helper\RoboFiles\SassRoboFile;
+use Sweetchuck\Robo\Sass\Tests\AcceptanceTester;
+use Sweetchuck\Robo\Sass\Tests\Helper\RoboFiles\SassRoboFile;
 use Symfony\Component\Filesystem\Filesystem;
 
 class SassCompileFilesTaskCest
@@ -39,11 +39,11 @@ class SassCompileFilesTaskCest
             codecept_data_dir('project-01/scss'),
             '01.scss',
             "--cssPath=$tmpDir",
-            "--mapPath=$tmpDir"
+            "--mapPath=$tmpDir",
         );
-        $I->assertEquals(0, $I->getRoboTaskExitCode($id));
-        $I->assertEquals('', $I->getRoboTaskStdOutput($id));
-        $I->assertEquals(" [Sass::compile] Compile files\n", $I->getRoboTaskStdError($id));
+        $I->assertSame(0, $I->getRoboTaskExitCode($id));
+        $I->assertSame('', $I->getRoboTaskStdOutput($id));
+        $I->assertSame(" [Sass::compile] Compile files\n", $I->getRoboTaskStdError($id));
         $I->openFile("$tmpDir/01.css");
         $I->seeInThisFile(implode("\n", [
             '/* My Comment. */',
@@ -55,21 +55,23 @@ class SassCompileFilesTaskCest
             '  font-size: 3.3333px;',
             '}',
             '',
-            '/*# sourceMappingURL='
+            '/*# sourceMappingURL=',
         ]));
-        //
-        //$map = json_decode(file_get_contents("$tmpDir/01.css.map"), true);
-        //$I->assertEquals(
-        //    [
-        //        'version',
-        //        'file',
-        //        'sources',
-        //        'sourcesContent',
-        //        'names',
-        //        'mappings',
-        //    ],
-        //    array_keys($map)
-        //);
+
+        $map = json_decode(
+            (string) file_get_contents("$tmpDir/01.css.map"),
+            true,
+        );
+        $I->assertSame(
+            [
+                'version',
+                'file',
+                'sources',
+                'names',
+                'mappings',
+            ],
+            array_keys($map),
+        );
     }
 
     public function runCompileFilesFail(AcceptanceTester $I): void
@@ -84,15 +86,15 @@ class SassCompileFilesTaskCest
             codecept_data_dir('project-01/scss'),
             '02.scss',
             "--cssPath=$tmpDir",
-            "--mapPath=$tmpDir"
+            "--mapPath=$tmpDir",
         );
-        $I->assertEquals(1, $I->getRoboTaskExitCode($id));
-        $I->assertEquals('', $I->getRoboTaskStdOutput($id));
+        $I->assertSame(1, $I->getRoboTaskExitCode($id));
+        $I->assertSame('', $I->getRoboTaskStdOutput($id));
         $I->assertStringContainsString(" [Sass::compile] Compile files\n", $I->getRoboTaskStdError($id));
         $I->assertStringContainsString(" [Sass::compile] Compile files\n", $I->getRoboTaskStdError($id));
         $I->assertStringContainsString(
             'Error: Invalid CSS after "  color: #ffffff;": expected "}", was ""',
-            $I->getRoboTaskStdError($id)
+            $I->getRoboTaskStdError($id),
         );
     }
 

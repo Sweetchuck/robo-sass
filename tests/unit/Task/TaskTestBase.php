@@ -6,15 +6,19 @@ namespace Sweetchuck\Robo\Sass\Tests\Unit\Task;
 
 use Codeception\Test\Unit;
 use League\Container\Container as LeagueContainer;
+use Robo\Application;
 use Robo\Collection\CollectionBuilder;
-use Robo\Config\Config;
 use Robo\Config\Config as RoboConfig;
 use Robo\Robo;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyOutput;
+use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcess;
+use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcessHelper;
 use Sweetchuck\Robo\Sass\Task\BaseTask;
-use Sweetchuck\Robo\Sass\Test\Helper\Dummy\DummyTaskBuilder;
-use Sweetchuck\Robo\Sass\Test\UnitTester;
+use Sweetchuck\Robo\Sass\Tests\Helper\Dummy\DummyTaskBuilder;
+use Sweetchuck\Robo\Sass\Tests\UnitTester;
 use Symfony\Component\Console\Application as SymfonyApplication;
+use Symfony\Component\Console\Logger\ConsoleLogger;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\ErrorHandler\BufferingLogger;
 
 abstract class TaskTestBase extends Unit
@@ -27,11 +31,6 @@ abstract class TaskTestBase extends Unit
 
     protected UnitTester $tester;
 
-    /**
-     * @var \Sweetchuck\Robo\Sass\Task\BaseTask|\Robo\Collection\CollectionBuilder
-     */
-    protected $task;
-
     protected DummyTaskBuilder $taskBuilder;
 
     /**
@@ -41,31 +40,45 @@ abstract class TaskTestBase extends Unit
     {
         parent::_before();
 
-        Robo::unsetContainer();
+        DummyProcess::reset();
 
+        Robo::unsetContainer();
         $this->container = new LeagueContainer();
-        $application = new SymfonyApplication('Sweetchuck - Robo Sass', '1.0.0');
-        $this->config = new Config();
+        $application = new SymfonyApplication('Sweetchuck - Robo PHPUnit', '3.0.0');
+        $application->getHelperSet()->set(new DummyProcessHelper(), 'process');
+        $this->config = new RoboConfig();
         $input = null;
         $output = new DummyOutput([
-            'verbosity' => DummyOutput::VERBOSITY_DEBUG,
+            'verbosity' => OutputInterface::VERBOSITY_DEBUG,
         ]);
 
         $this->container->add('container', $this->container);
 
         Robo::configureContainer($this->container, $application, $this->config, $input, $output);
-        $this->container->addShared('logger', BufferingLogger::class);
-
-        $this->builder = CollectionBuilder::create($this->container, null);
-        $this->taskBuilder = new DummyTaskBuilder();
-        $this->taskBuilder->setContainer($this->container);
-        $this->taskBuilder->setBuilder($this->builder);
-
-        $this->initTask();
+        $this->container->add('logger', BufferingLogger::class);
     }
 
-    /**
-     * @return $this
-     */
-    abstract protected function initTask();
+    protected function createTask(): BaseTask
+    {
+        $container = new LeagueContainer();
+        $application = new Application('Sweetchuck - Robo Sass', '3.0.0');
+        $application->getHelperSet()->set(new DummyProcessHelper(), 'process');
+        $config = new RoboConfig();
+        $output = new DummyOutput([]);
+        $loggerOutput = new DummyOutput([]);
+        $logger = new ConsoleLogger($loggerOutput);
+
+        $container->add('output', $output);
+        $container->add('logger', $logger);
+        $container->add('config', $config);
+        $container->add('application', $application);
+
+        $task = $this->createTaskInstance();
+        $task->setOutput($output);
+        $task->setLogger($logger);
+
+        return $task;
+    }
+
+    abstract protected function createTaskInstance(): BaseTask;
 }

@@ -4,60 +4,62 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Sass\Tests\Unit\Task;
 
-use InvalidArgumentException;
+use Codeception\Attribute\DataProvider;
+use Sweetchuck\Robo\Sass\Task\SassCompileFilesTask;
 use Symfony\Component\Finder\Finder;
 
 /**
- * @property \Sweetchuck\Robo\Sass\Task\SassCompileFilesTask|\Robo\Collection\CollectionBuilder $task
+ * @method SassCompileFilesTask createTask()
  */
 class SassCompileFilesTaskTest extends TaskTestBase
 {
 
-    protected function initTask()
+    protected function createTaskInstance(): SassCompileFilesTask
     {
-        $this->task = $this->taskBuilder->taskSassCompile();
-
-        return $this;
+        return new SassCompileFilesTask();
     }
 
     public function testGetSetStyle(): void
     {
-        $this->task->setStyle('nested');
-        $this->tester->assertEquals('nested', $this->task->getStyle());
-        $this->tester->assertEquals(\Sass::STYLE_NESTED, $this->task->getStyleNumeric());
+        $task = $this->createTask();
+        $task->setStyle('nested');
+        $this->tester->assertSame('nested', $task->getStyle());
+        $this->tester->assertSame(\Sass::STYLE_NESTED, $task->getStyleNumeric());
 
-        $this->task->setStyle(2);
-        $this->tester->assertEquals('compact', $this->task->getStyle());
-        $this->tester->assertEquals(\Sass::STYLE_COMPACT, $this->task->getStyleNumeric());
+        $task->setStyle(2);
+        $this->tester->assertSame('compact', $task->getStyle());
+        $this->tester->assertSame(\Sass::STYLE_COMPACT, $task->getStyleNumeric());
     }
 
     public function testSetStyleInvalidNumber(): void
     {
-        $this->task->setStyle(0);
-        $this->task->setStyle(1);
-        $this->task->setStyle(2);
-        $this->task->setStyle(3);
+        $task = $this->createTask();
+        $task->setStyle(0);
+        $task->setStyle(1);
+        $task->setStyle(2);
+        $task->setStyle(3);
 
         $this->tester->expectThrowable(
-            new InvalidArgumentException('Invalid style identifier "42"', 1),
-            function () {
-                $this->task->setStyle(42);
-            }
+            new \InvalidArgumentException('Invalid style identifier "42"', 1),
+            function () use ($task) {
+                $task->setStyle(42);
+            },
         );
     }
 
     public function testSetStyleInvalidName(): void
     {
-        $this->task->setStyle('nested');
-        $this->task->setStyle('expanded');
-        $this->task->setStyle('compact');
-        $this->task->setStyle('compressed');
+        $task = $this->createTask();
+        $task->setStyle('nested');
+        $task->setStyle('expanded');
+        $task->setStyle('compact');
+        $task->setStyle('compressed');
 
         $this->tester->expectThrowable(
-            new InvalidArgumentException('Invalid style identifier "foo"', 1),
-            function () {
-                $this->task->setStyle('foo');
-            }
+            new \InvalidArgumentException('Invalid style identifier "foo"', 1),
+            function () use ($task) {
+                $task->setStyle('foo');
+            },
         );
     }
 
@@ -322,31 +324,29 @@ class SassCompileFilesTaskTest extends TaskTestBase
     /**
      * @param array<string, mixed> $expected
      * @param array<string, mixed> $options
-     *
-     * @dataProvider casesRunSuccess
      */
+    #[DataProvider('casesRunSuccess')]
     public function testRunSuccess(array $expected, array $options): void
     {
         $expected += [
             'exitCode' => 0,
             'data' => [],
         ];
-
-        $result = $this
-            ->task
+        $task = $this->createTask();
+        $result = $task
             ->setOptions($options)
             ->run();
 
-        $this->tester->assertEquals(
+        $this->tester->assertSame(
             $expected['exitCode'],
             $result->getExitCode(),
-            'Exit code'
+            'Exit code',
         );
         foreach ($expected['data'] as $name => $value) {
-            $this->tester->assertEquals(
+            $this->tester->assertSame(
                 $value,
                 $result[$name],
-                "Asset in result[$name]"
+                "Asset in result[$name]",
             );
         }
     }
@@ -377,19 +377,18 @@ class SassCompileFilesTaskTest extends TaskTestBase
     /**
      * @param array<string, mixed> $expected
      * @param array<string, mixed> $options
-     *
-     * @dataProvider casesRunFail
      */
+    #[DataProvider('casesRunFail')]
     public function testRunFail(array $expected, array $options): void
     {
-        $result = $this
-            ->task
+        $task = $this->createTask();
+        $result = $task
             ->setOptions($options)
             ->run();
 
-        $this->tester->assertEquals(
+        $this->tester->assertSame(
             $expected['exitCode'],
-            $result->getExitCode()
+            $result->getExitCode(),
         );
     }
 
@@ -408,14 +407,15 @@ class SassCompileFilesTaskTest extends TaskTestBase
     public function testGetSetIncludePaths(): void
     {
         $options = ['includePaths' => ['a', 'b']];
-        $this->task->setOptions($options);
+        $task = $this->createTask();
+        $task->setOptions($options);
 
-        $this->tester->assertEquals(['a' => true, 'b' => true], $this->task->getIncludePaths());
+        $this->tester->assertSame(['a' => true, 'b' => true], $task->getIncludePaths());
 
-        $this->task->removeIncludePath('a');
-        $this->tester->assertEquals(['b' => true], $this->task->getIncludePaths());
+        $task->removeIncludePath('a');
+        $this->tester->assertSame(['b' => true], $task->getIncludePaths());
 
-        $this->task->addIncludePath('c');
-        $this->tester->assertEquals(['b' => true, 'c' => true], $this->task->getIncludePaths());
+        $task->addIncludePath('c');
+        $this->tester->assertSame(['b' => true, 'c' => true], $task->getIncludePaths());
     }
 }

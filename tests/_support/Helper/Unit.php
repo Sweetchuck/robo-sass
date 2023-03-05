@@ -2,9 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace Sweetchuck\Robo\Sass\Test\Helper;
+namespace Sweetchuck\Robo\Sass\Tests\Helper;
 
-class Unit extends \Codeception\Module
+use Codeception\Module;
+
+class Unit extends Module
 {
-
 }

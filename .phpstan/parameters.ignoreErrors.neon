@@ -81,11 +81,6 @@ parameters:
 			path: ../src/Task/SassCompileFilesTask.php
 
 		-
-			message: "#^Method Sweetchuck\\\\Robo\\\\Sass\\\\Test\\\\Helper\\\\Dummy\\\\DummyTaskBuilder\\:\\:taskSassCompile\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../tests/_support/Helper/Dummy/DummyTaskBuilder.php
-
-		-
 			message: "#^PHPDoc tag @return with type Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Sass\\\\Task\\\\SassCompileFilesTask is not subtype of native type Robo\\\\Collection\\\\CollectionBuilder\\.$#"
 			count: 1
 			path: ../tests/_support/Helper/Dummy/DummyTaskBuilder.php
@@ -101,51 +96,6 @@ parameters:
 			path: ../tests/_support/Helper/RoboFiles/SassRoboFile.php
 
 		-
-			message: "#^Method Sweetchuck\\\\Robo\\\\Sass\\\\Test\\\\Helper\\\\RoboFiles\\\\SassRoboFile\\:\\:taskSassCompile\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../tests/_support/Helper/RoboFiles/SassRoboFile.php
-
-		-
 			message: "#^PHPDoc tag @return with type Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Sass\\\\Task\\\\SassCompileFilesTask is not subtype of native type Robo\\\\Collection\\\\CollectionBuilder\\.$#"
 			count: 1
 			path: ../tests/_support/Helper/RoboFiles/SassRoboFile.php
-
-		-
-			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Sass\\\\Task\\\\SassCompileFilesTask\\:\\:addIncludePath\\(\\)\\.$#"
-			count: 1
-			path: ../tests/unit/Task/SassCompileFilesTaskTest.php
-
-		-
-			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Sass\\\\Task\\\\SassCompileFilesTask\\:\\:getIncludePaths\\(\\)\\.$#"
-			count: 3
-			path: ../tests/unit/Task/SassCompileFilesTaskTest.php
-
-		-
-			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Sass\\\\Task\\\\SassCompileFilesTask\\:\\:getStyle\\(\\)\\.$#"
-			count: 2
-			path: ../tests/unit/Task/SassCompileFilesTaskTest.php
-
-		-
-			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Sass\\\\Task\\\\SassCompileFilesTask\\:\\:getStyleNumeric\\(\\)\\.$#"
-			count: 2
-			path: ../tests/unit/Task/SassCompileFilesTaskTest.php
-
-		-
-			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Sass\\\\Task\\\\SassCompileFilesTask\\:\\:removeIncludePath\\(\\)\\.$#"
-			count: 1
-			path: ../tests/unit/Task/SassCompileFilesTaskTest.php
-
-		-
-			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Sass\\\\Task\\\\SassCompileFilesTask\\:\\:setOptions\\(\\)\\.$#"
-			count: 3
-			path: ../tests/unit/Task/SassCompileFilesTaskTest.php
-
-		-
-			message: "#^Call to an undefined method Robo\\\\Collection\\\\CollectionBuilder\\|Sweetchuck\\\\Robo\\\\Sass\\\\Task\\\\SassCompileFilesTask\\:\\:setStyle\\(\\)\\.$#"
-			count: 12
-			path: ../tests/unit/Task/SassCompileFilesTaskTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$commandFile of static method Robo\\\\Collection\\\\CollectionBuilder\\:\\:create\\(\\) expects Robo\\\\Tasks, null given\\.$#"
-			count: 1
-			path: ../tests/unit/Task/TaskTestBase.php

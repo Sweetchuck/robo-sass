@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Sweetchuck\Robo\Sass\Test\Helper\RoboFiles;
+namespace Sweetchuck\Robo\Sass\Tests\Helper\RoboFiles;
 
 use Sweetchuck\Robo\Sass\SassTaskLoader;
 use Robo\Contract\TaskInterface;

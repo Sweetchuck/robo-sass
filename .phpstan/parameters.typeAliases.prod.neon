@@ -1,2 +1,20 @@
 parameters:
-    typeAliases: {}
+	typeAliases:
+		robo-sass-enum-styles-string: '"nested"|"expanded"|"compact"|"compressed"'
+		robo-sass-enum-styles-numeric: 'int<0, 3>'
+		robo-sass-enum-styles: 'robo-sass-enum-styles-string|robo-sass-enum-styles-numeric'
+		robo-sass-task-compile-options: '''
+			array{
+				assetNamePrefix?: string,
+				gemPaths?: array<string>,
+				style?: robo-sass-enum-styles,
+				includePaths?: array<string>|array<string, bool>,
+				precision?: int,
+				comments?: bool,
+				indent?: int,
+				embed?: bool,
+				files?: iterable<\Symfony\Component\Finder\SplFileInfo>,
+				cssPath?: string,
+				mapPath?: string,
+			}
+		'''

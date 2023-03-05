@@ -9,6 +9,9 @@ use Robo\Collection\CollectionBuilder;
 trait SassTaskLoader
 {
     /**
+     * @param array<string, mixed> $options
+     * @phpstan-param robo-sass-task-compile-options $options
+     *
      * @return \Sweetchuck\Robo\Sass\Task\SassCompileFilesTask|\Robo\Collection\CollectionBuilder
      */
     protected function taskSassCompile(array $options = []): CollectionBuilder

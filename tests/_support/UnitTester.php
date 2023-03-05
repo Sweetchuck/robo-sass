@@ -1,6 +1,6 @@
 <?php
 
-namespace Sweetchuck\Robo\Sass\Test;
+namespace Sweetchuck\Robo\Sass\Tests;
 
 /**
  * Inherited Methods

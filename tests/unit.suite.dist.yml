@@ -1,6 +1,5 @@
-
-class_name: 'UnitTester'
+actor: 'UnitTester'
 modules:
     enabled:
         - 'Asserts'
-        - '\Sweetchuck\Robo\Sass\Test\Helper\Unit'
+        - '\Sweetchuck\Robo\Sass\Tests\Helper\Unit'

@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Sass\Task;
 
-use InvalidArgumentException;
 use Sass;
 use SassException;
 use Sweetchuck\Robo\Sass\Utils;
@@ -84,7 +83,7 @@ class SassCompileFilesTask extends BaseTask
         } elseif ($style = array_search($value, $styles, true)) {
             $this->style = $style;
         } else {
-            throw new InvalidArgumentException(sprintf('Invalid style identifier "%s"', $value), 1);
+            throw new \InvalidArgumentException(sprintf('Invalid style identifier "%s"', $value), 1);
         }
 
         return $this;
