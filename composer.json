@@ -27,7 +27,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "ext-sass": ">=0.5",
         "consolidation/robo": "^4.0",
         "symfony/filesystem": "^5.0 || ^6.0"
@@ -45,7 +45,6 @@
         "sweetchuck/robo-git": "3.x-dev",
         "sweetchuck/robo-phpcs": "3.x-dev",
         "sweetchuck/robo-phpstan": "2.x-dev",
-        "sweetchuck/utils": "1.x-dev",
         "symfony/error-handler": "^5.0 || ^6.0",
         "symfony/finder": "^5.0 || ^6.0"
     },
