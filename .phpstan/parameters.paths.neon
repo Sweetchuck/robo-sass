@@ -4,6 +4,8 @@ parameters:
 		- ../tests/
 		- ../RoboFile.php
 	excludePaths:
-		- ../RoboFileAcceptance.php
-		- ../tests/_log/
-		- ../tests/_support/_generated/
+		analyseAndScan:
+			- ../RoboFileAcceptance.php
+			- ../tests/_log/
+			- ../tests/_output/
+			- ../tests/_support/_generated/

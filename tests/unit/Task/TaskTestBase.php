@@ -44,7 +44,7 @@ abstract class TaskTestBase extends Unit
 
         Robo::unsetContainer();
         $this->container = new LeagueContainer();
-        $application = new SymfonyApplication('Sweetchuck - Robo PHPUnit', '3.0.0');
+        $application = new SymfonyApplication('Sweetchuck - Robo Sass', '4.0.0');
         $application->getHelperSet()->set(new DummyProcessHelper(), 'process');
         $this->config = new RoboConfig();
         $input = null;
@@ -61,7 +61,7 @@ abstract class TaskTestBase extends Unit
     protected function createTask(): BaseTask
     {
         $container = new LeagueContainer();
-        $application = new Application('Sweetchuck - Robo Sass', '3.0.0');
+        $application = new Application('Sweetchuck - Robo Sass', '4.0.0');
         $application->getHelperSet()->set(new DummyProcessHelper(), 'process');
         $config = new RoboConfig();
         $output = new DummyOutput([]);

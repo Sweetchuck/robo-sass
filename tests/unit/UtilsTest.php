@@ -6,9 +6,11 @@ namespace Sweetchuck\Robo\Sass\Tests\Unit;
 
 use Codeception\Attribute\DataProvider;
 use Codeception\Test\Unit;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Sweetchuck\Robo\Sass\Tests\UnitTester;
 use Sweetchuck\Robo\Sass\Utils;
 
+#[CoversClass(Utils::class)]
 class UtilsTest extends Unit
 {
     protected UnitTester $tester;
@@ -16,7 +18,7 @@ class UtilsTest extends Unit
     /**
      * @return array<string, mixed>
      */
-    public function casesIncludePathsFromGemPaths(): array
+    public static function casesIncludePathsFromGemPaths(): array
     {
         $gemSetDir = rtrim(codecept_data_dir(), DIRECTORY_SEPARATOR);
         return [
@@ -35,13 +37,13 @@ class UtilsTest extends Unit
     }
 
     /**
-     * @param array<mixed> $expected
+     * @param array<string> $expected
      * @param array<string> $gemPaths
      */
     #[DataProvider('casesIncludePathsFromGemPaths')]
     public function testIncludePathsFromGemPaths(array $expected, array $gemPaths): void
     {
-        $this->tester->assertEquals($expected, Utils::includePathsFromGemPaths($gemPaths));
+        $this->tester->assertSame($expected, Utils::includePathsFromGemPaths($gemPaths));
     }
 
     /**
