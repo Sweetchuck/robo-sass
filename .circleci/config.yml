@@ -7,6 +7,9 @@ orbs:
 .env_common: &env_common
     SHELL: '/bin/bash'
 
+.env_xdebug: &env_xdebug
+    XDEBUG_MODE: 'coverage'
+
 .env_composer: &env_composer
     COMPOSER_NO_INTERACTION: '1'
     COMPOSER_MEMORY_LIMIT: '-1'
@@ -18,7 +21,9 @@ executors:
         resource_class: 'medium+'
         environment:
             <<: *env_common
+            <<: *env_xdebug
             <<: *env_composer
+            APP_XDEBUG_VERSION: '3.2.2'
         docker:
             -
                 name: 'main'
@@ -28,11 +33,25 @@ executors:
         resource_class: 'medium+'
         environment:
             <<: *env_common
+            <<: *env_xdebug
             <<: *env_composer
+            APP_XDEBUG_VERSION: '3.3.1'
         docker:
             -
                 name: 'main'
                 image: 'cimg/php:8.3'
+
+    php_plus2:
+        resource_class: 'medium+'
+        environment:
+            <<: *env_common
+            <<: *env_xdebug
+            <<: *env_composer
+            APP_XDEBUG_VERSION: '3.4.0'
+        docker:
+            -
+                name: 'main'
+                image: 'cimg/php:8.4'
 
 commands:
     php_extension_pecl_install:
@@ -47,32 +66,33 @@ commands:
                 type: 'string'
                 default: ''
         steps:
-            - run:
-                  name: 'Install PHP extension with pecl – <<parameters.ext_name>>'
-                  command: |
-                      if php -m | grep '<<parameters.ext_name>>' ; then
-                          echo 1>&2 'PHP extension <<parameters.ext_name>> is already enabled. No need to install'
+            -
+                run:
+                    name: 'Install PHP extension with pecl – <<parameters.ext_name>>'
+                    command: |
+                        if php -m | grep '<<parameters.ext_name>>' ; then
+                            echo 1>&2 'PHP extension <<parameters.ext_name>> is already enabled. No need to install'
 
-                          exit 0
-                      fi
+                            exit 0
+                        fi
 
-                      if compgen -G '/usr/local/lib/php/extensions/*/<<parameters.ext_name>>.so' 1>/dev/null ; then
-                          echo 1>&2 'PHP extension <<parameters.ext_name>> is already installed.'
+                        if compgen -G '/usr/local/lib/php/extensions/*/<<parameters.ext_name>>.so' 1>/dev/null ; then
+                            echo 1>&2 'PHP extension <<parameters.ext_name>> is already installed.'
 
-                          exit 0
-                      fi
+                            exit 0
+                        fi
 
-                      if [[ '<<parameters.package_names>>' != '' ]] ; then
-                          sudo apt-get update
-                          sudo apt-get install -y <<parameters.package_names>>
-                      fi
+                        if [[ '<<parameters.package_names>>' != '' ]] ; then
+                            sudo apt-get update
+                            sudo apt-get install -y <<parameters.package_names>>
+                        fi
 
-                      extName='<<parameters.ext_name>>'
-                      case "<<parameters.ext_name>>" in
-                          'xdebug') extName="${extName}-${APP_XDEBUG_VERSION}" ;;
-                      esac
+                        extName='<<parameters.ext_name>>'
+                        case "<<parameters.ext_name>>" in
+                            'xdebug') extName="${extName}-${APP_XDEBUG_VERSION}" ;;
+                        esac
 
-                      sudo pecl install "${extName}"
+                        sudo pecl install "${extName}"
             - php_extension_enable:
                   ext_name: '<<parameters.ext_name>>'
                   is_zend: '<<parameters.is_zend>>'
@@ -88,47 +108,48 @@ commands:
                 type: 'string'
                 default: ''
         steps:
-            - run:
-                  name: 'Compile bundled PHP extension – <<parameters.ext_name>>'
-                  command: |
-                      if php -m | grep '<<parameters.ext_name>>' ; then
-                          echo 1>&2 'PHP extension <<parameters.ext_name>> is already enabled. No need to install'
+            -
+                run:
+                    name: 'Compile bundled PHP extension – <<parameters.ext_name>>'
+                    command: |
+                        if php -m | grep '<<parameters.ext_name>>' ; then
+                            echo 1>&2 'PHP extension <<parameters.ext_name>> is already enabled. No need to install'
 
-                          exit 0
-                      fi
+                            exit 0
+                        fi
 
-                      if compgen -G '/usr/local/lib/php/extensions/*/<<parameters.ext_name>>.so' 1>/dev/null ; then
-                          echo 1>&2 'PHP extension <<parameters.ext_name>> is already installed.'
+                        if compgen -G '/usr/local/lib/php/extensions/*/<<parameters.ext_name>>.so' 1>/dev/null ; then
+                            echo 1>&2 'PHP extension <<parameters.ext_name>> is already installed.'
 
-                          exit 0
-                      fi
+                            exit 0
+                        fi
 
-                      if [[ '<<parameters.package_names>>' != '' ]] ; then
-                          sudo apt-get update
-                          sudo apt-get install -y <<parameters.package_names>>
-                      fi
+                        if [[ '<<parameters.package_names>>' != '' ]] ; then
+                            sudo apt-get update
+                            sudo apt-get install -y <<parameters.package_names>>
+                        fi
 
-                      if command -v docker-php-ext-install ; then
-                          sudo docker-php-ext-install '<<parameters.ext_name>>'
+                        if command -v docker-php-ext-install ; then
+                            sudo docker-php-ext-install '<<parameters.ext_name>>'
 
-                          exit $?
-                      fi
+                            exit $?
+                        fi
 
-                      srcRoot='/usr/local/src'
-                      phpVersion="$(php -r 'echo \PHP_VERSION;')"
-                      phpSrcDir="${srcRoot}/php-${phpVersion}"
+                        srcRoot='/usr/local/src'
+                        phpVersion="$(php -r 'echo \PHP_VERSION;')"
+                        phpSrcDir="${srcRoot}/php-${phpVersion}"
 
-                      if [[ ! -d "${phpSrcDir}" ]] ; then
-                          wget "https://www.php.net/distributions/php-${phpVersion}.tar.gz"
-                          sudo tar xvzf "php-${phpVersion}.tar.gz" -C "${srcRoot}"
-                          rm "php-${phpVersion}.tar.gz"
-                      fi
+                        if [[ ! -d "${phpSrcDir}" ]] ; then
+                            wget "https://www.php.net/distributions/php-${phpVersion}.tar.gz"
+                            sudo tar xvzf "php-${phpVersion}.tar.gz" -C "${srcRoot}"
+                            rm "php-${phpVersion}.tar.gz"
+                        fi
 
-                      cd "${srcRoot}/php-${phpVersion}/ext/<<parameters.ext_name>>"
-                      sudo phpize
-                      sudo ./configure
-                      sudo make -j
-                      sudo make install
+                        cd "${srcRoot}/php-${phpVersion}/ext/<<parameters.ext_name>>"
+                        sudo phpize
+                        sudo ./configure
+                        sudo make -j
+                        sudo make install
             - php_extension_enable:
                   ext_name: '<<parameters.ext_name>>'
                   is_zend: '<<parameters.is_zend>>'
@@ -141,29 +162,60 @@ commands:
                 type: 'string'
                 default: 'false'
         steps:
-            - run:
-                  name: 'Enable PHP extension – <<parameters.ext_name>>'
-                  command: |
-                      if php -m | grep '<<parameters.ext_name>>' ; then
-                          exit 0
-                      fi
+            -
+                run:
+                    name: 'Enable PHP extension – <<parameters.ext_name>>'
+                    command: |
+                        if php -m | grep '<<parameters.ext_name>>' ; then
+                            exit 0
+                        fi
 
-                      scanDir="$(php -i | grep --color=never --only-matching --perl-regexp '(?<=^Scan this dir for additional \.ini files => ).+')"
+                        scanDir="$(php -i | grep --color=never --only-matching --perl-regexp '(?<=^Scan this dir for additional \.ini files => ).+')"
 
-                      if [[ '<<parameters.is_zend>>' = 'true' ]] ; then
-                          content='zend_extension=<<parameters.ext_name>>'
-                      else
-                          content='extension=<<parameters.ext_name>>'
-                      fi
+                        if [[ '<<parameters.is_zend>>' = 'true' ]] ; then
+                            content='zend_extension=<<parameters.ext_name>>'
+                        else
+                            content='extension=<<parameters.ext_name>>'
+                        fi
 
-                      echo "${content}" | sudo tee --append "${scanDir}/<<parameters.ext_name>>.ini"
+                        echo "${content}" | sudo tee --append "${scanDir}/<<parameters.ext_name>>.ini"
 
     php_extension_install_pcov:
         description: 'Install PHP extension – pcov'
+        parameters:
+            executor:
+                description: 'Identifier of the executor'
+                type: 'string'
+                default: ''
         steps:
             -
-                php_extension_pecl_install:
-                    ext_name: 'pcov'
+                when:
+                    condition:
+                        not:
+                            equal: [ '<<parameters.executor>>', 'php_plus2' ]
+                    steps:
+                        -
+                            php_extension_pecl_install:
+                                ext_name: 'pcov'
+
+    php_extension_install_xdebug:
+        description: 'Install PHP extension – xdebug'
+        parameters:
+            executor:
+                description: 'Identifier of the executor'
+                type: 'string'
+                default: ''
+        steps:
+            -
+                when:
+                    condition:
+                        or:
+                            - equal: [ '<<parameters.executor>>', 'php_plus2' ]
+                    steps:
+                        -
+                            php_extension_pecl_install:
+                                ext_name: 'xdebug'
+                                is_zend: 'true'
 
     php_extension_install_sass:
         description: 'Install PHP extension – sass'
@@ -272,7 +324,12 @@ jobs:
         executor: '<<parameters.executor>>'
         steps:
             - 'php_extension_install_sass'
-            - 'php_extension_install_pcov'
+            -
+                php_extension_install_pcov:
+                    executor: '<<parameters.executor>>'
+            -
+                php_extension_install_xdebug:
+                    executor: '<<parameters.executor>>'
             - 'checkout'
             - 'composer_install'
             - 'test'
@@ -295,3 +352,4 @@ workflows:
                             executor:
                                 - 'php_min'
                                 - 'php_plus1'
+                                - 'php_plus2'
